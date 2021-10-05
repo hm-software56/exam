@@ -1,0 +1,26 @@
+{
+    "English": "ພາສາລາວ",
+    "Select Country":"ເລຶອກປະເທດ",
+    "Please select country":"ທ່ານຕ້ອງເລຶອກປະເທດ",
+    "Enter your firstname":"ປ້ອນຊື່ຂອງທ່ານ",
+    "Please enter firstname":"ທ່ານຕ້ອງປ້ອນຊື່ຂອງທ່ານ",
+    "Enter your lastname":"ປ້ອນນາມສະກຸນຂອງທ່ານ",
+    "Please enter your lastname":"ທ່ານຕ້ອງປ້ອນນາມສະກຸນຂອງທ່ານ",
+    "Enter your organization":"ປ້ອນອົງກອນຂອງທ່ານ",
+    "Please enter organization":"ທ່ານຕ້ອງປ້ອນອົງກອນຂອງທ່ານ",
+    "Submit":"ຢືນຢັນ",
+<<<<<<< working copy
+<<<<<<< working copy
+    "Processing Data":"ກໍາລັງປະມວນຂໍ້ມູນ",
+    "News":"ຂ່າວ",
+    "About Us":"ກ່ຽວກັບພວກເຮົາ",
+    "Read More":"ອ່ານເພີ່ມ"
+=======
+    "Processing Data":"ກໍາລັງປະມວນຂໍ້ມູນ"
+>>>>>>> destination
+=======
+    "Processing Data":"ກໍາລັງປະມວນຂໍ້ມູນ",
+    "News":"ຂ່າວ",
+    "About Us":"ກ່ຽວກັບພວກເຮົາ"
+>>>>>>> merge rev
+}
