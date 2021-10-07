@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'lo',
-      supportedLocales: ['lo', 'en'],
+      supportedLocales: ['lo', 'lo'],
       basePath: 'assets/i18n/');
 
   runApp(LocalizedApp(delegate, MyApp()));
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
-    print(localizationDelegate.currentLocale);
+    //print(localizationDelegate.currentLocale);
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
       child: MaterialApp(

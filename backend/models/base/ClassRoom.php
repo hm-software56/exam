@@ -11,10 +11,11 @@ use Yii;
  *
  * @property integer $id
  * @property string $class_room_name
+ * @property integer $teacher_id
  *
- * @property \app\models\StudentHasClassRoom[] $studentHasClassRooms
  * @property \app\models\Student[] $students
  * @property \app\models\Subject[] $subjects
+ * @property \app\models\User $teacher
  * @property string $aliasModel
  */
 abstract class ClassRoom extends \yii\db\ActiveRecord
@@ -36,8 +37,10 @@ abstract class ClassRoom extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['class_room_name'], 'required'],
-            [['class_room_name'], 'string', 'max' => 255]
+            [['class_room_name', 'teacher_id'], 'required'],
+            [['teacher_id'], 'integer'],
+            [['class_room_name'], 'string', 'max' => 255],
+            [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\User::className(), 'targetAttribute' => ['teacher_id' => 'id']]
         ];
     }
 
@@ -49,15 +52,8 @@ abstract class ClassRoom extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('models', 'ID'),
             'class_room_name' => Yii::t('models', 'Class Room Name'),
+            'teacher_id' => Yii::t('models', 'Teacher ID'),
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStudentHasClassRooms()
-    {
-        return $this->hasMany(\app\models\StudentHasClassRoom::className(), ['class_room_id' => 'id']);
     }
 
     /**
@@ -65,7 +61,7 @@ abstract class ClassRoom extends \yii\db\ActiveRecord
      */
     public function getStudents()
     {
-        return $this->hasMany(\app\models\Student::className(), ['id' => 'student_id'])->viaTable('student_has_class_room', ['class_room_id' => 'id']);
+        return $this->hasMany(\app\models\Student::className(), ['class_room_id' => 'id']);
     }
 
     /**
@@ -74,6 +70,14 @@ abstract class ClassRoom extends \yii\db\ActiveRecord
     public function getSubjects()
     {
         return $this->hasMany(\app\models\Subject::className(), ['class_room_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeacher()
+    {
+        return $this->hasOne(\app\models\User::className(), ['id' => 'teacher_id']);
     }
 
 

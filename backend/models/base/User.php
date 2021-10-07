@@ -15,6 +15,7 @@ use Yii;
  * @property integer $status
  * @property integer $profile_id
  *
+ * @property \app\models\ClassRoom[] $classRooms
  * @property \app\models\Profile $profile
  * @property \app\models\Subject[] $subjects
  * @property string $aliasModel
@@ -57,6 +58,14 @@ abstract class User extends \yii\db\ActiveRecord
             'status' => Yii::t('models', 'Status'),
             'profile_id' => Yii::t('models', 'Profile ID'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClassRooms()
+    {
+        return $this->hasMany(\app\models\ClassRoom::className(), ['teacher_id' => 'id']);
     }
 
     /**
