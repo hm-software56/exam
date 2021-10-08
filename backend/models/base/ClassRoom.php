@@ -11,6 +11,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $class_room_name
+ * @property integer $count_student
  * @property integer $teacher_id
  *
  * @property \app\models\Student[] $students
@@ -38,7 +39,7 @@ abstract class ClassRoom extends \yii\db\ActiveRecord
     {
         return [
             [['class_room_name', 'teacher_id'], 'required'],
-            [['teacher_id'], 'integer'],
+            [['count_student', 'teacher_id'], 'integer'],
             [['class_room_name'], 'string', 'max' => 255],
             [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\User::className(), 'targetAttribute' => ['teacher_id' => 'id']]
         ];
@@ -52,6 +53,7 @@ abstract class ClassRoom extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('models', 'ID'),
             'class_room_name' => Yii::t('models', 'Class Room Name'),
+            'count_student' => Yii::t('models', 'Count Student'),
             'teacher_id' => Yii::t('models', 'Teacher ID'),
         ];
     }

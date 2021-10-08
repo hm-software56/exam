@@ -13,8 +13,10 @@ use Yii;
  * @property string $question
  * @property string $details
  * @property integer $subject_id
+ * @property integer $exam_id
  *
  * @property \app\models\Answer[] $answers
+ * @property \app\models\Exam $exam
  * @property \app\models\StudentAnswer[] $studentAnswers
  * @property \app\models\Subject $subject
  * @property string $aliasModel
@@ -38,9 +40,10 @@ abstract class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'subject_id'], 'required'],
+            [['question', 'subject_id', 'exam_id'], 'required'],
             [['question', 'details'], 'string'],
-            [['subject_id'], 'integer'],
+            [['subject_id', 'exam_id'], 'integer'],
+            [['exam_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Exam::className(), 'targetAttribute' => ['exam_id' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Subject::className(), 'targetAttribute' => ['subject_id' => 'id']]
         ];
     }
@@ -55,6 +58,7 @@ abstract class Question extends \yii\db\ActiveRecord
             'question' => Yii::t('models', 'Question'),
             'details' => Yii::t('models', 'Details'),
             'subject_id' => Yii::t('models', 'Subject ID'),
+            'exam_id' => Yii::t('models', 'Exam ID'),
         ];
     }
 
@@ -64,6 +68,14 @@ abstract class Question extends \yii\db\ActiveRecord
     public function getAnswers()
     {
         return $this->hasMany(\app\models\Answer::className(), ['question_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExam()
+    {
+        return $this->hasOne(\app\models\Exam::className(), ['id' => 'exam_id']);
     }
 
     /**

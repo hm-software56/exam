@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dropdown_search2/dropdown_search2.dart';
 import 'package:exam/config/config.dart';
 import 'package:exam/menu/menu.dart';
 import 'package:exam/student/student.dart';
@@ -8,38 +9,48 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ClassRoom extends StatefulWidget {
-  const ClassRoom({Key? key}) : super(key: key);
+class Subject extends StatefulWidget {
+  const Subject({Key? key}) : super(key: key);
 
   @override
-  _ClassRoomState createState() => _ClassRoomState();
+  _SubjectState createState() => _SubjectState();
 }
 
-class _ClassRoomState extends State<ClassRoom> {
+class _SubjectState extends State<Subject> {
   final formKey = GlobalKey<FormState>();
-  final classroomnameController = TextEditingController();
-  /**================ Add Class Room =====================*/
-  Future<void> addClassRoom() async {
+  final titleController = TextEditingController();
+  final classRoomIDController = TextEditingController();
+  /**================ Add subject =====================*/
+  Future<void> addSubject() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
     final user_id = await prefs.getInt('user_id');
+    var class_room_id;
+    for (var item in dataList) {
+      if (item['class_room_name'] == classRoomIDController.text) {
+        class_room_id = item['id'];
+      }
+    }
     try {
       var formData = FormData.fromMap({
         'tokenID': apitoken,
         'teacher_id': user_id,
-        'class_room_name': classroomnameController.text
+        'class_room_id': class_room_id,
+        'title': titleController.text
       });
       var response =
-          await Dio().post('${urlapi}api/addclassroom', data: formData);
+          await Dio().post('${urlapi}api/addsubject', data: formData);
       if (response.statusCode == 200 && response.data != null) {
-        dataList.insert(0, response.data);
-        classroomnameController.value = TextEditingValue.empty;
+        //dataList.insert(0, response.data);
+        titleController.value = TextEditingValue.empty;
+        classRoomIDController.value = TextEditingValue.empty;
+        listDataSubject();
         setState(() {
-          dataList;
+          class_room_name='';
         });
       }
     } catch (e) {
-      print('Wrong add class room');
+      print('Wrong add subject');
       //AlertLoss();
     }
   }
@@ -47,16 +58,57 @@ class _ClassRoomState extends State<ClassRoom> {
   /**================ edit Class Room =====================*/
   bool isedit = false;
   int id_edit = 0;
-  String name = '';
-  Future<void> selecteditClassRoom(int id, String name) async {
-    classroomnameController.value = TextEditingValue(text: name);
+  var class_room_name = '';
+  Future<void> selecteditSubject(var data) async {
+    titleController.value = TextEditingValue(text: data['title']);
+    classRoomIDController.value =
+        TextEditingValue(text: data['classRoom']['class_room_name']);
     setState(() {
       isedit = true;
-      id_edit = id;
+      id_edit = int.parse(data['id']);
+      class_room_name = data['classRoom']['class_room_name'];
     });
   }
 
-  Future<void> editClassRoom(int id) async {
+  Future<void> editSubject(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final apitoken = await prefs.getString('apitoken');
+    final user_id = await prefs.getInt('user_id');
+    var class_room_id;
+    for (var item in dataList) {
+      if (item['class_room_name'] == classRoomIDController.text) {
+        class_room_id = item['id'];
+      }
+    }
+
+    try {
+      var formData = FormData.fromMap({
+        'tokenID': apitoken,
+        'teacher_id': user_id,
+        'class_room_id': class_room_id,
+        'title': titleController.text,
+        'id': id
+      });
+      var response =
+          await Dio().post('${urlapi}api/editsubject', data: formData);
+      if (response.statusCode == 200 && response.data != null) {
+        titleController.value = TextEditingValue.empty;
+        classRoomIDController.value = TextEditingValue.empty;
+        listDataSubject();
+        setState(() {
+          isedit = false;
+          class_room_name = '';
+        });
+      }
+    } catch (e) {
+      print('Wrong edit subject');
+      //AlertLoss();
+    }
+  }
+
+/**=========== List Subject ===================*/
+  var dataListSubject = [];
+  Future<void> listDataSubject() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
     final user_id = await prefs.getInt('user_id');
@@ -64,26 +116,24 @@ class _ClassRoomState extends State<ClassRoom> {
       var formData = FormData.fromMap({
         'tokenID': apitoken,
         'teacher_id': user_id,
-        'class_room_name': classroomnameController.text,
-        'id': id
       });
       var response =
-          await Dio().post('${urlapi}api/editclassroom', data: formData);
+          await Dio().post('${urlapi}api/listsubject', data: formData);
       if (response.statusCode == 200 && response.data != null) {
-        classroomnameController.value = TextEditingValue.empty;
-        listDataClassRoom();
+        dataListSubject = response.data;
         setState(() {
-          isedit = false;
+          dataListSubject;
         });
       }
     } catch (e) {
-      print('Wrong edit class room');
+      print('Wrong List subject');
       //AlertLoss();
     }
   }
 
   /**=========== List Class Room ===================*/
   var dataList = [];
+  List<String> listCL = [];
   Future<void> listDataClassRoom() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -97,8 +147,12 @@ class _ClassRoomState extends State<ClassRoom> {
           await Dio().post('${urlapi}api/listclassroom', data: formData);
       if (response.statusCode == 200 && response.data != null) {
         dataList = response.data;
+        for (var data in dataList) {
+          listCL.add(data['class_room_name']);
+        }
         setState(() {
           dataList;
+          listCL;
         });
       }
     } catch (e) {
@@ -108,7 +162,7 @@ class _ClassRoomState extends State<ClassRoom> {
   }
 
 /**=========== delete Class Room ===================*/
-  Future<void> deleteDataClassRoom(int id) async {
+  Future<void> deleteSubject(int id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
     final user_id = await prefs.getInt('user_id');
@@ -119,10 +173,9 @@ class _ClassRoomState extends State<ClassRoom> {
         'id': id,
       });
       var response =
-          await Dio().post('${urlapi}api/deleteclassroom', data: formData);
+          await Dio().post('${urlapi}api/deletesubject', data: formData);
       if (response.statusCode == 200 && response.data != null) {
-        print(response.data);
-        listDataClassRoom();
+        listDataSubject();
       }
     } catch (e) {
       print('Wrong delete class room');
@@ -133,6 +186,7 @@ class _ClassRoomState extends State<ClassRoom> {
   @override
   void initState() {
     listDataClassRoom();
+    listDataSubject();
     super.initState();
   }
 
@@ -141,7 +195,7 @@ class _ClassRoomState extends State<ClassRoom> {
       drawer: Menu(),
       appBar: AppBar(
         title: Center(
-          child: Text(translate('Class room')),
+          child: Text(translate('Subject')),
         ),
       ),
       body: SingleChildScrollView(
@@ -166,20 +220,43 @@ class _ClassRoomState extends State<ClassRoom> {
                   child: Column(
                     children: [
                       Text(
-                        translate('Add Class Room'),
+                        translate('Add Subject'),
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Divider(
                         color: Colors.lightBlue,
                       ),
+                      DropdownSearch<String>(
+                        mode: Mode.MENU,
+                        validator: (dynamic value) {
+                          if (value == null || value.isEmpty) {
+                            return translate('Please select class room');
+                          }
+                          return null;
+                        },
+                        hint: translate("Select Class Room"),
+                        dropdownSearchDecoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
+                        showAsSuffixIcons: true,
+                        showSelectedItem: true,
+                        items: listCL,
+                        label: translate("Class Room"),
+                        selectedItem: class_room_name,
+                        showSearchBox: false,
+                        onChanged: (value) {
+                          classRoomIDController.value =
+                              TextEditingValue(text: '${value}');
+                        },
+                      ),
                       TextFormField(
-                        controller: classroomnameController,
+                        controller: titleController,
                         decoration: InputDecoration(
-                            labelText: translate('Input class room')),
+                            labelText: translate('Input Subject')),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return translate('Please enter class room');
+                            return translate('Please enter subject');
                           }
                           return null;
                         },
@@ -191,9 +268,9 @@ class _ClassRoomState extends State<ClassRoom> {
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             if (isedit) {
-                              editClassRoom(id_edit);
+                              editSubject(id_edit);
                             } else {
-                              addClassRoom();
+                              addSubject();
                             }
                           }
                         },
@@ -221,7 +298,7 @@ class _ClassRoomState extends State<ClassRoom> {
                       SizedBox(
                         height: 10,
                       ),
-                      dataList.length == 0
+                      dataListSubject.length == 0
                           ? SpinKitWave(
                               size: 30.0,
                               itemBuilder: (BuildContext context, int index) {
@@ -238,8 +315,8 @@ class _ClassRoomState extends State<ClassRoom> {
                               //defaultColumnWidth: FixedColumnWidth(120.0),
                               columnWidths: {
                                 0: FlexColumnWidth(),
-                                1: FixedColumnWidth(100),
                                 2: FixedColumnWidth(100),
+                                3: FixedColumnWidth(100),
                               },
                               border: TableBorder.all(
                                   color: Colors.black,
@@ -249,35 +326,46 @@ class _ClassRoomState extends State<ClassRoom> {
                                 TableRow(children: [
                                   Column(children: [
                                     Container(
-                                      color: Colors.lightBlue,
                                       alignment: Alignment.center,
+                                      color: Colors.lightBlue,
                                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                                       child: Text(
                                         translate('Class room'),
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       ),
                                     )
                                   ]),
                                   Column(children: [
                                     Container(
-                                      color: Colors.lightBlue,
                                       alignment: Alignment.center,
+                                      color: Colors.lightBlue,
                                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                                       child: Text(
-                                        translate('Students'),
-                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        translate('Subject'),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       ),
                                     )
                                   ]),
                                   Column(children: [
-                                    Text('', style: TextStyle(fontSize: 20.0))
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Students'),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                      ),
+                                    )
                                   ]),
+                                  Column(children: [Text('')]),
                                 ]),
-                                for (var item in dataList)
+                                for (var item in dataListSubject)
                                   TableRow(children: [
                                     Column(children: [
                                       Container(
@@ -285,10 +373,17 @@ class _ClassRoomState extends State<ClassRoom> {
                                         padding:
                                             EdgeInsets.fromLTRB(5, 2, 5, 2),
                                         child: Text(
-                                          '${item['class_room_name']}',
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                          ),
+                                          '${item['classRoom']['class_room_name']}',
+                                        ),
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          '${item['title']}',
                                         ),
                                       )
                                     ]),
@@ -303,13 +398,15 @@ class _ClassRoomState extends State<ClassRoom> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        Student(data: item)),
+                                                        Student(
+                                                            data: item[
+                                                                'classRoom'])),
                                               );
                                             },
                                             child: Row(
                                               children: [
                                                 Text(
-                                                    '${item['count_student']}'),
+                                                    '${item['classRoom']['count_student']}'),
                                                 Icon(Icons
                                                     .settings_accessibility)
                                               ],
@@ -330,7 +427,8 @@ class _ClassRoomState extends State<ClassRoom> {
                                           children: [
                                             InkWell(
                                               onTap: () {
-                                                deleteDataClassRoom(item['id']);
+                                                deleteSubject(
+                                                    int.parse(item['id']));
                                               },
                                               child: Icon(
                                                 Icons.remove_circle,
@@ -340,9 +438,7 @@ class _ClassRoomState extends State<ClassRoom> {
                                             Text(' | '),
                                             InkWell(
                                                 onTap: () {
-                                                  selecteditClassRoom(
-                                                      item['id'],
-                                                      item['class_room_name']);
+                                                  selecteditSubject(item);
                                                 },
                                                 child: Icon(
                                                   Icons.border_color,

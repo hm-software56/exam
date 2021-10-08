@@ -13,12 +13,10 @@ use Yii;
  * @property string $title
  * @property integer $class_room_id
  * @property integer $teacher_id
- * @property string $start_time
- * @property string $end_time
- * @property string $time_answer
- * @property string $url_answer
  *
+ * @property \app\models\Absent[] $absents
  * @property \app\models\ClassRoom $classRoom
+ * @property \app\models\Exam[] $exams
  * @property \app\models\Question[] $questions
  * @property \app\models\User $teacher
  * @property string $aliasModel
@@ -42,11 +40,9 @@ abstract class Subject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'class_room_id', 'teacher_id', 'time_answer', 'url_answer'], 'required'],
+            [['title', 'class_room_id', 'teacher_id'], 'required'],
             [['title'], 'string'],
             [['class_room_id', 'teacher_id'], 'integer'],
-            [['start_time', 'end_time', 'time_answer'], 'safe'],
-            [['url_answer'], 'string', 'max' => 255],
             [['class_room_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\ClassRoom::className(), 'targetAttribute' => ['class_room_id' => 'id']],
             [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\User::className(), 'targetAttribute' => ['teacher_id' => 'id']]
         ];
@@ -62,11 +58,15 @@ abstract class Subject extends \yii\db\ActiveRecord
             'title' => Yii::t('models', 'Title'),
             'class_room_id' => Yii::t('models', 'Class Room ID'),
             'teacher_id' => Yii::t('models', 'Teacher ID'),
-            'start_time' => Yii::t('models', 'Start Time'),
-            'end_time' => Yii::t('models', 'End Time'),
-            'time_answer' => Yii::t('models', 'Time Answer'),
-            'url_answer' => Yii::t('models', 'Url Answer'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAbsents()
+    {
+        return $this->hasMany(\app\models\Absent::className(), ['subject_id' => 'id']);
     }
 
     /**
@@ -75,6 +75,14 @@ abstract class Subject extends \yii\db\ActiveRecord
     public function getClassRoom()
     {
         return $this->hasOne(\app\models\ClassRoom::className(), ['id' => 'class_room_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExams()
+    {
+        return $this->hasMany(\app\models\Exam::className(), ['subject_id' => 'id']);
     }
 
     /**

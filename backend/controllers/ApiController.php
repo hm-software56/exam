@@ -5,6 +5,8 @@ use \app\models\Profile;
 use \app\models\User;
 use \app\models\ClassRoom;
 use \app\models\Student;
+use \app\models\Subject;
+use \app\models\Absent;
 use Yii;
 use yii\web\UploadedFile;
 class ApiController extends \yii\web\Controller
@@ -208,6 +210,161 @@ class ApiController extends \yii\web\Controller
         $cl->count_student=count($student);
         $cl->save();
     }
+
+    public function actionAddsubject(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $sj=new Subject();
+        $result=[];
+        $sj->class_room_id=Yii::$app->request->post('class_room_id');
+        $sj->teacher_id=Yii::$app->request->post('teacher_id');
+        $sj->title=Yii::$app->request->post('title');
+        if($sj->save()){
+            $result=$sj;
+        }
+        return $result;
+    }
+
+    public function actionEditsubject(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $sj=Subject::find()->where(['id'=>Yii::$app->request->post('id')])->one();
+        $result=[];
+        $sj->class_room_id=Yii::$app->request->post('class_room_id');
+        $sj->teacher_id=Yii::$app->request->post('teacher_id');
+        $sj->title=Yii::$app->request->post('title');
+        if($sj->save()){
+            $result=$sj;
+        }
+        return $result;
+    }
+
+    public function actionListsubject(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $sj=Subject::find()
+        ->joinWith('classRoom')
+        ->where(['subject.teacher_id'=>Yii::$app->request->post('teacher_id')])
+       ->asArray()
+        ->all();
+        return $sj;
+    }
+
+    public function actionListsubjectbyclassroom(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $sj=Subject::find()
+        ->where(['teacher_id'=>Yii::$app->request->post('teacher_id')])
+        ->andWhere(['class_room_id'=>Yii::$app->request->post('class_room_id')])
+        ->all();
+        return $sj;
+    }
+    
+    public function actionDeletesubject(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $sj=Subject::find()->where(['id'=>Yii::$app->request->post('id')])->one();
+        $result=[];
+        if($sj->delete()){
+            $result=[true];
+        }
+        return $result;
+    }
+
+    public function actionAbsentgeneratedate(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+            $as=new Absent();
+            $as->subject_id=Yii::$app->request->post('subject_id');
+            $as->student_id=$student['id'];
+            $as->date=date('Y-m-d H:i:s');
+            if($as->save()){
+                $result=$as;
+            }
+        }
+        return $result;
+    }
+    public function actionAbsentcheckgeneratedate(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+            $as=Absent::find()
+            ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+            ->andWhere(['student_id'=>$student['id']])
+            ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-2 hour'))])
+            ->andWhere(['<','date',date('Y-m-d H:i:s')])
+            ->one();
+            if($as)
+            {
+                $result[]=$as;
+            }
+        }
+        return $result;
+    }
+
+    public function actionDeleteabsentgeneratedate(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+            $as=Absent::find()
+            ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+            ->andWhere(['student_id'=>$student['id']])
+            ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-2 hour'))])
+            ->andWhere(['<','date',date('Y-m-d H:i:s')])
+            ->one();
+            $as->delete();
+        }
+        return $result;
+    }
+
+    public function actionEditabsent(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $as=Absent::find()
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-2 hour'))])
+        ->andWhere(['<','date',date('Y-m-d H:i:s')])
+        ->one();
+        if($as)
+        {
+            $as->absent=Yii::$app->request->post('absent');
+            if(!$as->save())
+            {
+                print_r($as->getErrors());exit;
+            }
+
+            $result=$as;
+        }
+        return $result;
+    }
+
     public function checkToken($tokenID)
     {
         if ($tokenID) {

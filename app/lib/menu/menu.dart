@@ -2,14 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:avatar_view/avatar_view.dart';
+import 'package:exam/absent/absent.dart';
 import 'package:exam/classroom/class_roor.dart';
 import 'package:exam/home/home.dart';
+import 'package:exam/subject/subject.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class Menu extends StatefulWidget {
-  const Menu({ Key? key }) : super(key: key);
+  const Menu({Key? key}) : super(key: key);
 
   @override
   _MenuState createState() => _MenuState();
@@ -18,11 +21,12 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   /**======= show data user login========= */
   var user;
-  listUser() async{
+  listUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-     user = prefs.getString('user');
-    user=JsonDecoder(user);
+    user = prefs.getString('user');
+    user = JsonDecoder(user);
   }
+
   /*================= Switch language =============*/
   Future<void> SwitchLang(context, var lang) async {
     changeLocale(context, lang);
@@ -34,12 +38,13 @@ class _MenuState extends State<Menu> {
       await prefs.setString('lang_code', lang);
     }
   }
-@override
-void initState() { 
-  //listUser();
-  super.initState();
-  
-}
+
+  @override
+  void initState() {
+    //listUser();
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -112,11 +117,12 @@ void initState() {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             onTap: () {
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (_) => ClassRoom()), (route) => false);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => ClassRoom()),
+                  (route) => false);
             },
           ),
-
           ListTile(
             leading: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -132,9 +138,35 @@ void initState() {
               translate('Subject'),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => Subject()),
+                  (route) => false);
+            },
           ),
-
+          ListTile(
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.subject_outlined,
+                  color: Colors.blueGrey,
+                ),
+              ],
+            ),
+            trailing: Icon(Icons.navigate_next),
+            title: Text(
+              translate('Check Absent'),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) =>Absent()),
+                  (route) => false);
+            },
+          ),
           ListTile(
             leading: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +184,6 @@ void initState() {
             ),
             onTap: () {},
           ),
-
           ListTile(
             leading: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +201,6 @@ void initState() {
             ),
             onTap: () {},
           ),
-
           ListTile(
             leading: Column(
               mainAxisAlignment: MainAxisAlignment.center,

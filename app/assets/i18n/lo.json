@@ -49,6 +49,17 @@
     "Loading...":"ທ່ານລໍຖ້າ...",
     "See format":"ເບີ່ງຮູບແບບ",
     "Full name":"ຊື່ ແລະ ນາມສະກຸນ",
+    "Add Subject":"ເພີ່ມວິຊາຮຽນ",
+    "Please select class room":"ທ່ານຕ້ອງເລືອກຫ້ອງຮຽນ",
+    "Select Class Room":"ເລືອກຫ້ອງຮຽນ",
+    "Input Subject":"ປ້ອນວິຊາຮຽນ",
+    "Please enter subject":"ທ່ານຕ້ອງປ້ອນວິຊາຮຽນ",
+    "Check Absent":"ໝາຍຂາດນັກຮຽນ",
+    "Check Name":"ກວດລາຍຊື່",
+    "Generate From":"ສ້າງຟອມ",
+    "Remove Form":"ລຶບຟອມ",
+    "List Students":"ລາຍຊື່ນັກສຶກສາ",
+    "Choose class room and subject":"ເລືອກຫັອງຮຽນ ແລະ ວິຊາຮຽນ",
     "Your file is not excel file\nThen extension xlsx, xls":"ໄຟຣຂອງເຈົ້າບໍ່ແມ່ນ exel ໄຟຣ\nແລ້ວນາມສະກຸນໄຟຣຕ້ອງເປັນ xlsx, xls",
     "Your file format is incorrect\nPlease check your file and reimport":"ໄຟຣຂອງທ່ານບໍຖືກຕາມຮູບແບບທີ່ກໍານົດ\nທ່ານກວດຄືນໄຟຣແລ້ວລອງເອົາເຂົ້າໃໝ່"
     

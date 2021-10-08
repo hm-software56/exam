@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:exam/config/config.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -98,7 +99,7 @@ class _StudentState extends State<Student> {
     }
   }
 
-  /**=========== List Class Room ===================*/
+  /**=========== List student ===================*/
   var dataList = [];
   Future<void> listDataStudent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -257,7 +258,7 @@ class _StudentState extends State<Student> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child:Image.asset('assets/images/formatimport.png'),
+                  child: Image.asset('assets/images/formatimport.png'),
                 ),
               ],
             ),
@@ -339,23 +340,27 @@ class _StudentState extends State<Student> {
                           children: [
                             Spacer(),
                             TextButton(
-                                onPressed: () {
-                                  seeFormatImport();
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.help_outline, color: Colors.grey,size: 20,),
-                                      Text(
-                                        translate('See format'),
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
+                              onPressed: () {
+                                seeFormatImport();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.help_outline,
+                                      color: Colors.grey,
+                                      size: 20,
+                                    ),
+                                    Text(
+                                      translate('See format'),
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 12),
+                                    ),
+                                  ],
                                 ),
                               ),
+                            ),
                           ],
                         ),
                         Divider(
@@ -451,102 +456,121 @@ class _StudentState extends State<Student> {
                         SizedBox(
                           height: 10,
                         ),
-                        Table(
-                          //defaultColumnWidth: FixedColumnWidth(120.0),
-                          columnWidths: {
-                            0: FixedColumnWidth(100),
-                            1: FlexColumnWidth(),
-                            2: FixedColumnWidth(100),
-                          },
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              style: BorderStyle.solid,
-                              width: 1),
-                          children: [
-                            TableRow(children: [
-                              Column(children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                  child: Text(
-                                    translate('Code'),
-                                    style: TextStyle(
-                                      fontSize: 20.0,
+                        dataList.length == 0
+                            ? SpinKitWave(
+                                size: 30.0,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: index.isEven
+                                          ? Colors.blue
+                                          : Colors.white,
                                     ),
-                                  ),
-                                )
-                              ]),
-                              Column(children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                  child: Text(
-                                    translate('Full name'),
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                    ),
-                                  ),
-                                )
-                              ]),
-                              Column(children: [
-                                Text('', style: TextStyle(fontSize: 20.0))
-                              ]),
-                            ]),
-                            for (var item in dataList)
-                              TableRow(children: [
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: Text(
-                                      '${item['student_code']}',
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                      ),
-                                    ),
-                                  )
-                                ]),
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: Text('${item['first_name']}' +
-                                        " " +
-                                        '${item['last_name']}'),
-                                  )
-                                ]),
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            deleteStudent(item['id']);
-                                          },
-                                          child: Icon(
-                                            Icons.remove_circle,
-                                            color: Colors.red,
+                                  );
+                                },
+                              )
+                            : Table(
+                                //defaultColumnWidth: FixedColumnWidth(120.0),
+                                columnWidths: {
+                                  0: FixedColumnWidth(100),
+                                  1: FlexColumnWidth(),
+                                  2: FixedColumnWidth(100),
+                                },
+                                border: TableBorder.all(
+                                    color: Colors.black,
+                                    style: BorderStyle.solid,
+                                    width: 1),
+                                children: [
+                                  TableRow(children: [
+                                    Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Code'),
+                                          style: TextStyle(
+                                           fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(' | '),
-                                        InkWell(
-                                            onTap: () {
-                                              selecteditStudent(item);
-                                            },
-                                            child: Icon(
-                                              Icons.border_color,
-                                              color: Colors.blueAccent,
-                                            )),
-                                      ],
-                                    ),
-                                  )
-                                ]),
-                              ]),
-                          ],
-                        ),
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Full name'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: TextStyle(fontSize: 20.0))
+                                    ]),
+                                  ]),
+                                  for (var item in dataList)
+                                    TableRow(children: [
+                                      Column(children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                          child: Text(
+                                            '${item['student_code']}',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
+                                        )
+                                      ]),
+                                      Column(children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                          child: Text('${item['first_name']}' +
+                                              " " +
+                                              '${item['last_name']}'),
+                                        )
+                                      ]),
+                                      Column(children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 2, 5, 2),
+                                          child: Row(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  deleteStudent(item['id']);
+                                                },
+                                                child: Icon(
+                                                  Icons.remove_circle,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              Text(' | '),
+                                              InkWell(
+                                                  onTap: () {
+                                                    selecteditStudent(item);
+                                                  },
+                                                  child: Icon(
+                                                    Icons.border_color,
+                                                    color: Colors.blueAccent,
+                                                  )),
+                                            ],
+                                          ),
+                                        )
+                                      ]),
+                                    ]),
+                                ],
+                              ),
                       ],
                     ),
                   ))
