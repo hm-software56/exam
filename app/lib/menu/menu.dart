@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:avatar_view/avatar_view.dart';
 import 'package:exam/absent/absent.dart';
+import 'package:exam/activity/activity.dart';
 import 'package:exam/classroom/class_roor.dart';
 import 'package:exam/home/home.dart';
 import 'package:exam/subject/subject.dart';
@@ -182,7 +183,12 @@ class _MenuState extends State<Menu> {
               translate('Activity'),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) =>Activity()),
+                  (route) => false);
+            },
           ),
           ListTile(
             leading: Column(

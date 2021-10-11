@@ -52,6 +52,8 @@ class _AbsentState extends State<Absent> {
   List<String> listSubject = [];
   var subject_id;
   var class_room_id;
+  var class_room_names;
+  var subject_titles;
   Future<void> listDataSubject(var class_room_name) async {
     listSubject = [];
     Loading();
@@ -61,9 +63,11 @@ class _AbsentState extends State<Absent> {
     for (var item in dataList) {
       if (item['class_room_name'] == class_room_name) {
         class_room_id = item['id'];
+        class_room_names=class_room_name;
         setState(() {
           class_room_id;
           dataListStudent = [];
+          class_room_names;
         });
       }
     }
@@ -107,6 +111,7 @@ class _AbsentState extends State<Absent> {
       if (item['title'] == subject_title) {
         setState(() {
           subject_id = item['id'];
+          subject_titles=subject_title;
         });
       }
     }
@@ -244,6 +249,32 @@ class _AbsentState extends State<Absent> {
     }
   }
 
+  /** ==================== Edit Absent ================= */
+
+  Future<void> editAbsentReason(var value, var student) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final apitoken = await prefs.getString('apitoken');
+    final user_id = await prefs.getInt('user_id');
+    int reason = value ? 1 : 0;
+    try {
+      var formData = FormData.fromMap({
+        'tokenID': apitoken,
+        'teacher_id': user_id,
+        'subject_id': subject_id,
+        'student_id': student['id'],
+        'reason': reason
+      });
+      var response =
+          await Dio().post('${urlapi}api/editabsentreason', data: formData);
+      if (response.statusCode == 200 && response.data != null) {
+        checkGenerateDate(dataListStudent);
+      }
+    } catch (e) {
+      print('Wrong Edit Absent');
+      //AlertLoss();
+    }
+  }
+
   /**============== CheckBox ============= */
   Widget checkBoxField(var student) {
     bool ischecked = false;
@@ -261,6 +292,32 @@ class _AbsentState extends State<Absent> {
             value: ischecked,
             onChanged: (bool? value) {
               editAbsent(value, student);
+            },
+          )
+        : Text('');
+  }
+
+  /**============== CheckBox ============= */
+  Widget checkBoxFieldReason(var student) {
+    bool ischecked = false;
+    bool is_come=true;
+    for (var absent in absentListData) {
+      if (absent['student_id'] == student['id']) {
+        if (absent['reason'] == 1) {
+          ischecked = true;
+        }
+        if (absent['absent'] == 1) {
+          is_come = false;
+        }
+      }
+    }
+    return generatedDate && is_come
+        ? Checkbox(
+            checkColor: Colors.white,
+            fillColor: MaterialStateProperty.resolveWith(getColor),
+            value: ischecked,
+            onChanged: (bool? value) {
+              editAbsentReason(value, student);
             },
           )
         : Text('');
@@ -420,9 +477,10 @@ class _AbsentState extends State<Absent> {
                           Table(
                             //defaultColumnWidth: FixedColumnWidth(120.0),
                             columnWidths: {
-                              0: FixedColumnWidth(100),
-                              1: FlexColumnWidth(),
-                              2: FixedColumnWidth(100),
+                              0: FixedColumnWidth(70),
+                              1: FixedColumnWidth(90),
+                              2: FlexColumnWidth(),
+                              3: FixedColumnWidth(110),
                             },
                             border: TableBorder.all(
                                 color: Colors.black,
@@ -443,6 +501,20 @@ class _AbsentState extends State<Absent> {
                                     ),
                                   )
                                 ]),
+                                Column(children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: Text(
+                                      translate('Reason'),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                ]),
+
                                 Column(children: [
                                   Container(
                                     alignment: Alignment.center,
@@ -502,6 +574,7 @@ class _AbsentState extends State<Absent> {
                                   )
                                 ]),
                               ]),
+                              
                               for (var item in dataListStudent)
                                 TableRow(children: [
                                   Column(children: [
@@ -509,6 +582,13 @@ class _AbsentState extends State<Absent> {
                                       alignment: Alignment.centerLeft,
                                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                                       child: Center(child: checkBoxField(item)),
+                                    )
+                                  ]),
+                                  Column(children: [
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Center(child: checkBoxFieldReason(item)),
                                     )
                                   ]),
                                   Column(children: [
@@ -529,8 +609,10 @@ class _AbsentState extends State<Absent> {
                                                 content: AbsentHistiry(
                                                     class_room_id:
                                                         class_room_id,
+                                                    class_room_name:class_room_names,
                                                     subject_id: subject_id,
-                                                    student_id: item['id'])),
+                                                    subject_title:subject_titles,
+                                                    student: item)),
                                       ),
                                       child: Row(
                                         children: [
@@ -538,7 +620,7 @@ class _AbsentState extends State<Absent> {
                                             Icons.history,
                                             size: 20,
                                           ),
-                                          Text('History')
+                                          Text(translate('History'))
                                         ],
                                       ),
                                     ),

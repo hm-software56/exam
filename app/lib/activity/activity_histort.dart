@@ -7,14 +7,18 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AbsentHistiry extends StatefulWidget {
+class ActivityHistory extends StatefulWidget {
+  var activity_id;
+  var activity_name;
   var class_room_id;
   var class_room_name;
   var subject_id;
   var subject_title;
   var student;
-  AbsentHistiry(
+  ActivityHistory(
       {Key? key,
+      required this.activity_id,
+      required this.activity_name,
       required this.class_room_id,
       required this.class_room_name,
       required this.subject_id,
@@ -23,23 +27,37 @@ class AbsentHistiry extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AbsentHistiryState createState() => _AbsentHistiryState(this.class_room_id,
-      this.class_room_name, this.subject_id, this.subject_title, this.student);
+  _ActivityHistoryState createState() => _ActivityHistoryState(
+      this.activity_id,
+      this.activity_name,
+      this.class_room_id,
+      this.class_room_name,
+      this.subject_id,
+      this.subject_title,
+      this.student);
 }
 
-class _AbsentHistiryState extends State<AbsentHistiry> {
+class _ActivityHistoryState extends State<ActivityHistory> {
+  var activity_id;
+  var activity_name;
   var class_room_id;
   var class_room_name;
   var subject_id;
   var subject_title;
   var student;
-  _AbsentHistiryState(this.class_room_id, this.class_room_name, this.subject_id,
-      this.subject_title, this.student);
+  _ActivityHistoryState(
+      this.activity_id,
+      this.activity_name,
+      this.class_room_id,
+      this.class_room_name,
+      this.subject_id,
+      this.subject_title,
+      this.student);
 
-  /** ==================== List Absent by students ================= */
-  List dataListHistoryAbsent = [];
+  /** ==================== List activity score by students ================= */
+  List dataListHistoryActivityScore= [];
   bool isloading = true;
-  Future<void> listHistoryAbsent() async {
+  Future<void> listHistoryActivityScore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
     final user_id = await prefs.getInt('user_id');
@@ -49,18 +67,19 @@ class _AbsentHistiryState extends State<AbsentHistiry> {
         'teacher_id': user_id,
         'subject_id': subject_id,
         'student_id': student['id'],
+        'activity_id':activity_id
       });
       var response =
-          await Dio().post('${urlapi}api/listhistoryabsent', data: formData);
+          await Dio().post('${urlapi}api/listhistoryactivity', data: formData);
       if (response.statusCode == 200 && response.data != null) {
-        dataListHistoryAbsent = response.data;
+        dataListHistoryActivityScore = response.data;
         setState(() {
-          dataListHistoryAbsent;
+          dataListHistoryActivityScore;
           isloading = false;
         });
       }
     } catch (e) {
-      print('Wrong List History Absent');
+      print('Wrong List History Activity Score');
       //AlertLoss();
     }
   }
@@ -69,7 +88,7 @@ class _AbsentHistiryState extends State<AbsentHistiry> {
   @override
   void initState() {
     super.initState();
-    listHistoryAbsent();
+    listHistoryActivityScore();
   }
 
   Widget build(BuildContext context) {
@@ -82,11 +101,11 @@ class _AbsentHistiryState extends State<AbsentHistiry> {
           Row(
             children: [
               Text(
-                translate('Subject') + ": ",
+                translate('Score') + ": ",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               Text(
-                '${subject_title}',
+                '${activity_name}',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ],
@@ -103,6 +122,10 @@ class _AbsentHistiryState extends State<AbsentHistiry> {
                     '${student['last_name']}' +
                     ', ' +
                     '${class_room_name}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                ", " + translate('Subject') + ": " + translate(subject_title),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
@@ -130,34 +153,31 @@ class _AbsentHistiryState extends State<AbsentHistiry> {
                   mainAxisSpacing: 10,
                   crossAxisCount: 5,
                   children: <Widget>[
-                    for (var item in dataListHistoryAbsent)
+                    for (var item in dataListHistoryActivityScore)
                       Container(
                         padding: const EdgeInsets.all(8),
                         child: Column(
                           children: [
-                            Text(item['date']),
+                            Text(item['date'].substring(0,item['date'].length-8)),
                             Divider(
                               color: Colors.white,
                             ),
                             Icon(
-                              item['absent'] == 1
+                              item['send'] == 1
                                   ? Icons.done_outline
                                   : Icons.close_sharp,
                               color: Colors.black,
                               size: 50,
                             ),
-                            item['absent'] == 1
-                                ? Text(translate('Come'))
-                                : item['reason'] == 1
-                                    ? Text(translate('Absence reason'))
-                                    : Text(translate('Absence no reason'))
+                            item['send'] == 1
+                                ? Text(translate('Sent/Joined'))
+                                : Text(translate('Not send/join')),
+                            Text(translate('Score')+": "+item['score'].toString()),
                           ],
                         ),
-                        color: item['absent'] == 1
+                        color: item['send'] == 1
                             ? Colors.teal
-                            : item['reason'] == 1
-                                ? Colors.red[200]
-                                : Colors.red,
+                            : Colors.red,
                       ),
                   ],
                 ),

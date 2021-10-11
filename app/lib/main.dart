@@ -1,4 +1,5 @@
-import 'package:exam/login.dart';
+import 'package:exam/home/home.dart';
+import 'package:exam/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               fontFamily:'Phetsarath OT',
               scaffoldBackgroundColor: Colors.lightBlue[50]),
-          home: Login()),
+          home: Home()),
     );
   }
 }

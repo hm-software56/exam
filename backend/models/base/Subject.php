@@ -15,6 +15,7 @@ use Yii;
  * @property integer $teacher_id
  *
  * @property \app\models\Absent[] $absents
+ * @property \app\models\Activity[] $activities
  * @property \app\models\ClassRoom $classRoom
  * @property \app\models\Exam[] $exams
  * @property \app\models\Question[] $questions
@@ -67,6 +68,14 @@ abstract class Subject extends \yii\db\ActiveRecord
     public function getAbsents()
     {
         return $this->hasMany(\app\models\Absent::className(), ['subject_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getActivities()
+    {
+        return $this->hasMany(\app\models\Activity::className(), ['subject_id' => 'id']);
     }
 
     /**

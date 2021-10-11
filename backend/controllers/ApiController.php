@@ -7,6 +7,8 @@ use \app\models\ClassRoom;
 use \app\models\Student;
 use \app\models\Subject;
 use \app\models\Absent;
+use \app\models\TypeActivity;
+use \app\models\Activity;
 use Yii;
 use yii\web\UploadedFile;
 class ApiController extends \yii\web\Controller
@@ -293,6 +295,7 @@ class ApiController extends \yii\web\Controller
             $as->subject_id=Yii::$app->request->post('subject_id');
             $as->student_id=$student['id'];
             $as->date=date('Y-m-d H:i:s');
+            $as->absent=1;
             if($as->save()){
                 $result=$as;
             }
@@ -365,6 +368,208 @@ class ApiController extends \yii\web\Controller
         return $result;
     }
 
+    public function actionEditabsentreason(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $as=Absent::find()
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-2 hour'))])
+        ->andWhere(['<','date',date('Y-m-d H:i:s')])
+        ->one();
+        if($as)
+        {
+            $as->reason=Yii::$app->request->post('reason');
+            if(!$as->save())
+            {
+                print_r($as->getErrors());exit;
+            }
+
+            $result=$as;
+        }
+        return $result;
+    }
+    public function actionListhistoryabsent(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $lhas=Absent::find()
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->all();
+        return $lhas;
+    }
+
+    public function actionListactivity(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $act=TypeActivity::find()
+        ->all();
+        return $act;
+    }
+
+    public function actionActivitygeneratescore(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+            $act=new Activity();
+            $act->subject_id=Yii::$app->request->post('subject_id');
+            $act->type_activity_id=Yii::$app->request->post('activity_id');
+            $act->student_id=$student['id'];
+            $act->date=date('Y-m-d H:i:s');
+            $act->score=1;
+            if($act->save()){
+                $result=$act;
+            }
+        }
+        return $result;
+    }
+    public function actionActivitycheckgeneratescore(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+            $act=Activity::find()
+            ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+            ->andWhere(['student_id'=>$student['id']])
+            ->andWhere(['type_activity_id'=>Yii::$app->request->post('activity_id')])
+            ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-1 days'))])
+            ->andWhere(['<','date',date('Y-m-d H:i:s')])
+            ->one();
+            if($act)
+            {
+                $result[]=$act;
+            }
+        }
+        return $result;
+    }
+    public function actionEditnotsendhomwork(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $act=Activity::find()
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->andWhere(['type_activity_id'=>Yii::$app->request->post('activity_id')])
+        ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-1 days'))])
+        ->andWhere(['<','date',date('Y-m-d H:i:s')])
+        ->one();
+        if($act)
+        {
+            $act->send=Yii::$app->request->post('send');
+            $act->score=Yii::$app->request->post('score');
+            if(!$act->save())
+            {
+                print_r($act->getErrors());exit;
+            }
+
+            $result=$act;
+        }
+        return $result;
+    }
+
+    public function actionEditinpuscore(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $act=Activity::find()
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->andWhere(['type_activity_id'=>Yii::$app->request->post('activity_id')])
+        ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-1 days'))])
+        ->andWhere(['<','date',date('Y-m-d H:i:s')])
+        ->one();
+        if($act)
+        {
+            $act->score=Yii::$app->request->post('score');
+            if(!$act->save())
+            {
+                print_r($act->getErrors());exit;
+            }
+
+            $result=$act;
+        }
+        return $result;
+    }
+
+    public function actionInputqascore(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $act=new Activity();
+        $act->subject_id=Yii::$app->request->post('subject_id');
+        $act->student_id=Yii::$app->request->post('student_id');
+        $act->score=Yii::$app->request->post('score');
+        $act->type_activity_id=Yii::$app->request->post('activity_id');
+        $act->date=date('Y-m-d H:i:s');
+        if(!$act->save())
+        {
+            print_r($act->getErrors());exit;
+        }
+        return $act;
+    }
+
+    public function actionDeletegeneratescore(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+            $act=Activity::find()
+            ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+            ->andWhere(['student_id'=>$student['id']])
+            ->andWhere(['type_activity_id'=>Yii::$app->request->post('activity_id')])
+            ->andWhere(['>','date',date('Y-m-d H:i:s', strtotime('-1 days'))])
+            ->andWhere(['<','date',date('Y-m-d H:i:s')])
+            ->one();
+            $act->delete();
+        }
+        return $result;
+    }
+
+    public function actionListhistoryactivity(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $lhact=Activity::find()
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->andWhere(['type_activity_id'=>Yii::$app->request->post('activity_id')])
+        ->all();
+        return $lhact;
+    }
+    public function actionDeleteqascore(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $del=Activity::find()
+        ->where(['id'=>Yii::$app->request->post('delete_id')])
+        ->one();
+        $del->delete();
+        return $del;
+    }
     public function checkToken($tokenID)
     {
         if ($tokenID) {
