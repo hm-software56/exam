@@ -1,5 +1,5 @@
-import 'package:exam/login/login.dart';
-import 'package:exam/menu/menu.dart';
+import '../login/login.dart';
+import '../menu/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';

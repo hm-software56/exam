@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:avatar_view/avatar_view.dart';
-import 'package:exam/absent/absent.dart';
-import 'package:exam/activity/activity.dart';
-import 'package:exam/classroom/class_roor.dart';
-import 'package:exam/home/home.dart';
-import 'package:exam/subject/subject.dart';
+import '../absent/absent.dart';
+import '../activity/activity.dart';
+import '../classroom/class_roor.dart';
+import '../home/home.dart';
+import '../subject/subject.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -70,7 +70,7 @@ class _MenuState extends State<Menu> {
                 SizedBox(height: 4),
                 Center(
                   child: Text(
-                    translate('Exam System Online'),
+                    translate('Management Student System'),
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

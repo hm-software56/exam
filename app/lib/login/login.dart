@@ -1,8 +1,8 @@
 import 'package:avatar_view/avatar_view.dart';
 import 'package:dio/dio.dart';
-import 'package:exam/config/config.dart';
-import 'package:exam/home/home.dart';
-import 'package:exam/register/register.dart';
+import '../config/config.dart';
+import '../home/home.dart';
+import '../register/register.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'dart:convert';
@@ -23,7 +23,16 @@ class _LoginState extends State<Login> {
   final loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String os = Platform.operatingSystem; //in your code
+  CheckPlatform()
+  {
+    try {
+      return Platform.operatingSystem; //in your code
+  } catch (e) {
+    return null; //in your code
+  }
+  }
+
+  
 /*================= Switch language =============*/
   Future<void> SwitchLang(var lang) async {
     changeLocale(context, lang);
@@ -123,7 +132,7 @@ class _LoginState extends State<Login> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Center(child: Text(translate('Exam Online')))),
+        appBar: AppBar(title: Center(child: Text(translate('Management Student System')))),
         body: Center(
           child: isloading
               ? Container(
@@ -142,7 +151,7 @@ class _LoginState extends State<Login> {
                 )
               : Container(
                   padding: const EdgeInsets.all(16.0),
-                  width: os == 'windows' ? 450 : null,
+                  width: CheckPlatform() == 'windows' ? 450 : null,
                   child: Form(
                     key: loginFormKey,
                     child: Column(

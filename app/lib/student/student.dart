@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
-import 'package:exam/config/config.dart';
+import '../config/config.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

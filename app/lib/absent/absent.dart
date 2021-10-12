@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:dropdown_search2/dropdown_search2.dart';
-import 'package:exam/absent/absent_history.dart';
-import 'package:exam/config/config.dart';
-import 'package:exam/menu/menu.dart';
+import 'absent_history.dart';
+import '../config/config.dart';
+import '../menu/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';

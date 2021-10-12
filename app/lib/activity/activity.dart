@@ -1,17 +1,15 @@
 import 'dart:io';
 import 'dart:math';
-
-import 'package:cron/cron.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_search2/dropdown_search2.dart';
-import 'package:exam/absent/absent_history.dart';
-import 'package:exam/activity/activity_histort.dart';
-import 'package:exam/config/config.dart';
-import 'package:exam/menu/menu.dart';
+import 'activity_histort.dart';
+import '../config/config.dart';
+import '../menu/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Activity extends StatefulWidget {
@@ -948,6 +946,15 @@ class _ActivityState extends State<Activity> {
                                     Divider(
                                       color: Colors.red,
                                     ),
+                                    StreamBuilder(
+        stream: Stream.periodic(const Duration(seconds: 1)),
+        builder: (context, snapshot) {
+          return Center(
+            child: Text(DateFormat('MM/dd/yyyy hh:mm:ss').format(DateTime.now()),
+            ),
+          );
+        },
+      ),
                                     Row(
                                       children: [
                                         Expanded(
