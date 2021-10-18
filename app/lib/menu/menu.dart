@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:avatar_view/avatar_view.dart';
+import 'package:exam/exam/exam.dart';
 import '../absent/absent.dart';
 import '../activity/activity.dart';
 import '../classroom/class_roor.dart';
@@ -38,6 +39,13 @@ class _MenuState extends State<Menu> {
     } else {
       await prefs.setString('lang_code', lang);
     }
+  }
+
+  Future<void> logOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (_) => Home()), (route) => false);
   }
 
   @override
@@ -107,7 +115,7 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.class__outlined,
+                  Icons.room_sharp,
                   color: Colors.blueGrey,
                 ),
               ],
@@ -151,7 +159,7 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.subject_outlined,
+                  Icons.add_business_outlined,
                   color: Colors.blueGrey,
                 ),
               ],
@@ -164,7 +172,7 @@ class _MenuState extends State<Menu> {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) =>Absent()),
+                  MaterialPageRoute(builder: (_) => Absent()),
                   (route) => false);
             },
           ),
@@ -173,7 +181,7 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.subject_outlined,
+                  Icons.local_activity,
                   color: Colors.blueGrey,
                 ),
               ],
@@ -186,7 +194,7 @@ class _MenuState extends State<Menu> {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) =>Activity()),
+                  MaterialPageRoute(builder: (_) => Activity()),
                   (route) => false);
             },
           ),
@@ -195,7 +203,7 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.subject_outlined,
+                  Icons.text_fields,
                   color: Colors.blueGrey,
                 ),
               ],
@@ -205,7 +213,12 @@ class _MenuState extends State<Menu> {
               translate('Exam'),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => Exam()),
+                  (route) => false);
+            },
           ),
           ListTile(
             leading: Column(
@@ -223,6 +236,25 @@ class _MenuState extends State<Menu> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             onTap: () {},
+          ),
+          ListTile(
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.logout,
+                  color: Colors.blueGrey,
+                ),
+              ],
+            ),
+            trailing: Icon(Icons.navigate_next),
+            title: Text(
+              translate('Logout'),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            onTap: () {
+              logOut();
+            },
           ),
           Divider(
             color: Colors.grey,

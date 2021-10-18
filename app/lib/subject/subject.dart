@@ -20,6 +20,9 @@ class _SubjectState extends State<Subject> {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final classRoomIDController = TextEditingController();
+  final scoreClassRoomController = TextEditingController();
+  final scoreActivityController = TextEditingController();
+  final scoreExamController = TextEditingController();
   /**================ Add subject =====================*/
   Future<void> addSubject() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,7 +39,10 @@ class _SubjectState extends State<Subject> {
         'tokenID': apitoken,
         'teacher_id': user_id,
         'class_room_id': class_room_id,
-        'title': titleController.text
+        'title': titleController.text,
+        'score_class_room': scoreClassRoomController.text,
+        'score_activity': scoreActivityController.text,
+        'score_exam': scoreExamController.text,
       });
       var response =
           await Dio().post('${urlapi}api/addsubject', data: formData);
@@ -44,9 +50,12 @@ class _SubjectState extends State<Subject> {
         //dataList.insert(0, response.data);
         titleController.value = TextEditingValue.empty;
         classRoomIDController.value = TextEditingValue.empty;
+        scoreClassRoomController.value = TextEditingValue.empty;
+        scoreActivityController.value = TextEditingValue.empty;
+        scoreExamController.value = TextEditingValue.empty;
         listDataSubject();
         setState(() {
-          class_room_name='';
+          class_room_name = '';
         });
       }
     } catch (e) {
@@ -61,6 +70,11 @@ class _SubjectState extends State<Subject> {
   var class_room_name = '';
   Future<void> selecteditSubject(var data) async {
     titleController.value = TextEditingValue(text: data['title']);
+    scoreClassRoomController.value =
+        TextEditingValue(text: data['score_class_room']);
+    scoreActivityController.value =
+        TextEditingValue(text: data['score_activity']);
+    scoreExamController.value = TextEditingValue(text: data['score_exam']);
     classRoomIDController.value =
         TextEditingValue(text: data['classRoom']['class_room_name']);
     setState(() {
@@ -87,6 +101,9 @@ class _SubjectState extends State<Subject> {
         'teacher_id': user_id,
         'class_room_id': class_room_id,
         'title': titleController.text,
+        'score_class_room': scoreClassRoomController.text,
+        'score_activity': scoreActivityController.text,
+        'score_exam': scoreExamController.text,
         'id': id
       });
       var response =
@@ -94,6 +111,9 @@ class _SubjectState extends State<Subject> {
       if (response.statusCode == 200 && response.data != null) {
         titleController.value = TextEditingValue.empty;
         classRoomIDController.value = TextEditingValue.empty;
+        scoreClassRoomController.value = TextEditingValue.empty;
+        scoreActivityController.value = TextEditingValue.empty;
+        scoreExamController.value = TextEditingValue.empty;
         listDataSubject();
         setState(() {
           isedit = false;
@@ -218,6 +238,7 @@ class _SubjectState extends State<Subject> {
                     ],
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         translate('Add Subject'),
@@ -260,6 +281,52 @@ class _SubjectState extends State<Subject> {
                           }
                           return null;
                         },
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: scoreClassRoomController,
+                              decoration: InputDecoration(
+                                  labelText: translate('Input score class room')),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return translate('Please enter score class room');
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                controller: scoreActivityController,
+                                decoration: InputDecoration(
+                                    labelText: translate('Input score activity')),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return translate('Please enter score activity');
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              controller: scoreExamController,
+                              decoration: InputDecoration(
+                                  labelText: translate('Input score exam')),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return translate('Please enter score exam');
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 10,
@@ -315,8 +382,11 @@ class _SubjectState extends State<Subject> {
                               //defaultColumnWidth: FixedColumnWidth(120.0),
                               columnWidths: {
                                 0: FlexColumnWidth(),
-                                2: FixedColumnWidth(100),
-                                3: FixedColumnWidth(100),
+                                2: FixedColumnWidth(140),
+                                3: FixedColumnWidth(140),
+                                4: FixedColumnWidth(140),
+                                5: FixedColumnWidth(100),
+                                6: FixedColumnWidth(100),
                               },
                               border: TableBorder.all(
                                   color: Colors.black,
@@ -332,8 +402,8 @@ class _SubjectState extends State<Subject> {
                                       child: Text(
                                         translate('Class room'),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     )
                                   ]),
@@ -345,8 +415,47 @@ class _SubjectState extends State<Subject> {
                                       child: Text(
                                         translate('Subject'),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                                  Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Score class room'),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                                  Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Score activity'),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                                  Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Score exam'),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     )
                                   ]),
@@ -358,8 +467,8 @@ class _SubjectState extends State<Subject> {
                                       child: Text(
                                         translate('Students'),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     )
                                   ]),
@@ -384,6 +493,36 @@ class _SubjectState extends State<Subject> {
                                             EdgeInsets.fromLTRB(5, 2, 5, 2),
                                         child: Text(
                                           '${item['title']}',
+                                        ),
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          '${item['score_class_room']}',
+                                        ),
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          '${item['score_activity']}',
+                                        ),
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          '${item['score_exam']}',
                                         ),
                                       )
                                     ]),

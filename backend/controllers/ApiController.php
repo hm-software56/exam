@@ -9,6 +9,9 @@ use \app\models\Subject;
 use \app\models\Absent;
 use \app\models\TypeActivity;
 use \app\models\Activity;
+use \app\models\Exam;
+use \app\models\Question;
+use \app\models\Answer;
 use Yii;
 use yii\web\UploadedFile;
 class ApiController extends \yii\web\Controller
@@ -223,6 +226,9 @@ class ApiController extends \yii\web\Controller
         $sj->class_room_id=Yii::$app->request->post('class_room_id');
         $sj->teacher_id=Yii::$app->request->post('teacher_id');
         $sj->title=Yii::$app->request->post('title');
+        $sj->score_class_room=Yii::$app->request->post('score_class_room');
+        $sj->score_activity=Yii::$app->request->post('score_activity');
+        $sj->score_exam=Yii::$app->request->post('score_exam');
         if($sj->save()){
             $result=$sj;
         }
@@ -239,6 +245,9 @@ class ApiController extends \yii\web\Controller
         $sj->class_room_id=Yii::$app->request->post('class_room_id');
         $sj->teacher_id=Yii::$app->request->post('teacher_id');
         $sj->title=Yii::$app->request->post('title');
+        $sj->score_class_room=Yii::$app->request->post('score_class_room');
+        $sj->score_activity=Yii::$app->request->post('score_activity');
+        $sj->score_exam=Yii::$app->request->post('score_exam');
         if($sj->save()){
             $result=$sj;
         }
@@ -570,6 +579,251 @@ class ApiController extends \yii\web\Controller
         $del->delete();
         return $del;
     }
+
+    public function actionCreateexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $exam=new Exam;
+        $exam->subject_id=Yii::$app->request->post('subject_id');
+        $exam->start_time=Yii::$app->request->post('start_date');
+        $exam->end_time=Yii::$app->request->post('end_date');
+        $exam->time_answer=Yii::$app->request->post('time_answer');
+        $exam->url_answer=Yii::$app->request->post('url_answer');
+        $exam->save();
+        return $exam;
+    }
+    public function actionListexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $exam=Exam::find()
+        ->joinWith(['subject','subject.classRoom'])
+        ->where(['subject.teacher_id'=>Yii::$app->request->post('teacher_id')])
+        ->orderBy('exam.id DESC')
+        ->asArray()
+        ->all();
+        return $exam;
+    }
+    public function actionEditexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $exam=Exam::find()->where(['id'=>Yii::$app->request->post('exam_id')])->one();
+        $exam->subject_id=Yii::$app->request->post('subject_id');
+        $exam->start_time=Yii::$app->request->post('start_date');
+        $exam->end_time=Yii::$app->request->post('end_date');
+        $exam->time_answer=Yii::$app->request->post('time_answer');
+        $exam->url_answer=Yii::$app->request->post('url_answer');
+        $exam->save();
+        return $exam;
+    }
+    public function actionDeleteexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $exam=Exam::find()->where(['id'=>Yii::$app->request->post('exam_id')])->one();
+        $exam->delete();
+        return $exam;
+    }
+
+
+    public function actionListquestion(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $question=Question::find()
+        ->joinWith('answers')
+        ->where(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['exam_id'=>Yii::$app->request->post('exam_id')])
+        ->asArray()
+        ->orderBy('id DESC')
+        ->all();
+        return $question;
+    }
+
+    public function actionCreatquestion(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $question=new Question();
+        $question->subject_id=Yii::$app->request->post('subject_id');
+        $question->exam_id=Yii::$app->request->post('exam_id');
+        $question->question=Yii::$app->request->post('question');
+        if($question->save()){
+            if(Yii::$app->request->post('answer1'))
+            {
+                $answer=new Answer();
+                $answer->question_id=$question->id;
+                $answer->answer=Yii::$app->request->post('answer1');
+                if(Yii::$app->request->post('answer_correct')==1)
+                {
+                    $answer->answer_true=1;
+                }
+                $answer->save();
+            }
+            if(Yii::$app->request->post('answer2'))
+            {
+                $answer=new Answer();
+                $answer->question_id=$question->id;
+                $answer->answer=Yii::$app->request->post('answer2');
+                if(Yii::$app->request->post('answer_correct')==2)
+                {
+                    $answer->answer_true=1;
+                }
+                $answer->save();
+            }
+            if(Yii::$app->request->post('answer3'))
+            {
+                $answer=new Answer();
+                $answer->question_id=$question->id;
+                $answer->answer=Yii::$app->request->post('answer3');
+                if(Yii::$app->request->post('answer_correct')==3)
+                {
+                    $answer->answer_true=1;
+                }
+                $answer->save();
+            }
+            if(Yii::$app->request->post('answer4'))
+            {
+                $answer=new Answer();
+                $answer->question_id=$question->id;
+                $answer->answer=Yii::$app->request->post('answer4');
+                if(Yii::$app->request->post('answer_correct')==4)
+                {
+                    $answer->answer_true=1;
+                }
+                $answer->save();
+            }
+        }
+        return $question;
+    }
+
+    public function actionEditquestion(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $question=Question::find()->where(['id'=>Yii::$app->request->post('question_id')])->one();
+        $question->subject_id=Yii::$app->request->post('subject_id');
+        $question->exam_id=Yii::$app->request->post('exam_id');
+        $question->question=Yii::$app->request->post('question');
+        if($question->save()){
+            $i=0;
+            foreach(Yii::$app->request->post('answers') as $ans)
+            {
+                $i++;
+                $answer=Answer::find()->where(['id'=>$ans['id']])->one();
+                if(Yii::$app->request->post('answer1') && $i==1)
+                {
+                    $answer->question_id=$question->id;
+                    $answer->answer=Yii::$app->request->post('answer1');
+                    if(Yii::$app->request->post('answer_correct')==1)
+                    {
+                        $answer->answer_true=1;
+                    }else{
+                        $answer->answer_true=0;
+                    }
+                    $answer->save();
+                }
+                elseif(Yii::$app->request->post('answer2') && $i==2)
+                {
+                    $answer->question_id=$question->id;
+                    $answer->answer=Yii::$app->request->post('answer2');
+                    if(Yii::$app->request->post('answer_correct')==2)
+                    {
+                        $answer->answer_true=1;
+                    }else{
+                        $answer->answer_true=0;
+                    }
+                    $answer->save();
+                }
+                elseif(Yii::$app->request->post('answer3') && $i==3)
+                {
+                    $answer->question_id=$question->id;
+                    $answer->answer=Yii::$app->request->post('answer3');
+                    if(Yii::$app->request->post('answer_correct')==3)
+                    {
+                        $answer->answer_true=1;
+                    }else{
+                        $answer->answer_true=0;
+                    }
+                    $answer->save();
+                }
+                elseif(Yii::$app->request->post('answer4') && $i==4)
+                {
+                    $answer->question_id=$question->id;
+                    $answer->answer=Yii::$app->request->post('answer4');
+                    if(Yii::$app->request->post('answer_correct')==4)
+                    {
+                        $answer->answer_true=1;
+                    }else{
+                        $answer->answer_true=0;
+                    }
+                    $answer->save();
+                }
+        }
+        }
+        return $question;
+    }
+
+    public function actionDeletequestion(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $qt=Question::find()->where(['id'=>Yii::$app->request->post('question_id')])->one();
+        $qt->delete();
+        return $qt;
+    }
+
+    public function actionDuplicateexam(){
+        /*$token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }*/
+        $exam=Exam::find()->where(['id'=>Yii::$app->request->post('exam_id')])->one();
+        if($exam)
+        {
+            $new_exam=new Exam();
+            $new_exam->subject_id=$exam->subject_id;
+            $new_exam->start_time=date('Y-m-d',strtotime(' +1 day'))." ".date('H:i:s',strtotime($exam->start_time));
+            $new_exam->end_time=date('Y-m-d',strtotime(' +1 day'))." ".date('H:i:s',strtotime($exam->end_time));
+            $new_exam->time_answer=$exam->time_answer;
+            $new_exam->url_answer=Yii::$app->request->post('url_answer');
+            if($new_exam->save()){
+                $questions=Question::find()->where(['exam_id'=>$exam->id])->all();
+                foreach($questions as $qt){
+                    $qt_new=new Question();
+                    $qt_new->subject_id=$qt->subject_id;
+                    $qt_new->exam_id=$new_exam->id;
+                    $qt_new->question=$qt->question;
+                    if($qt_new->save()){
+                        $answers=Answer::find()->where(['question_id'=>$qt->id])->all();
+                        foreach($answers as $ans){
+                            $ans_new=new Answer();
+                            $ans_new->question_id=$qt_new->id;
+                            $ans_new->answer=$ans->answer;
+                            $ans_new->answer_true=$ans->answer_true;
+                            if(!$ans_new->save()){
+                                print_r($ans_new->getErrors());exit;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        
+        return $exam;
+    }
+
     public function checkToken($tokenID)
     {
         if ($tokenID) {

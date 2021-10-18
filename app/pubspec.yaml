@@ -45,6 +45,8 @@ dependencies:
   dropdown_search2: ^0.6.9 
   intl: ^0.17.0 
   flutter_launcher_icons: ^0.9.2
+  date_time_picker: ^2.1.0
+  popover: ^0.2.6+3 
 
 dev_dependencies:
   flutter_app_name: ^0.1.0

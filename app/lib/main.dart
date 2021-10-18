@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'lo',
-      supportedLocales: ['lo', 'lo'],
+      supportedLocales: ['lo', 'en'],
       basePath: 'assets/i18n/');
 
   runApp(LocalizedApp(delegate, MyApp()));
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               primarySwatch: Colors.blue,
               fontFamily:'Phetsarath OT',
-              scaffoldBackgroundColor: Colors.lightBlue[50]),
+              scaffoldBackgroundColor: Colors.white),
           home: Home()),
     );
   }

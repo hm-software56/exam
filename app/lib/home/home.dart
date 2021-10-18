@@ -14,17 +14,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Future<void> checkLoginned() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    changeLocale(context, 'lo');
+    await prefs.setString('lang', 'Lao');
+    await prefs.setString('lang_code', 'lo');
     final user_id = await prefs.getInt('user_id');
     if (user_id == null) {
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => Login()), (route) => false);
     }
   }
+
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     checkLoginned();
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Menu(),
@@ -33,14 +38,12 @@ class _HomeState extends State<Home> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding:EdgeInsets.all(8),
+          padding: EdgeInsets.all(8),
           color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.max,
-            children: [
-              Text('dddddddddd')
-            ],
+            children: [Text('dddddddddd')],
           ),
         ),
       ),
