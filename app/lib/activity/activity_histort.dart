@@ -55,7 +55,7 @@ class _ActivityHistoryState extends State<ActivityHistory> {
       this.student);
 
   /** ==================== List activity score by students ================= */
-  List dataListHistoryActivityScore= [];
+  List dataListHistoryActivityScore = [];
   bool isloading = true;
   Future<void> listHistoryActivityScore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,7 +67,7 @@ class _ActivityHistoryState extends State<ActivityHistory> {
         'teacher_id': user_id,
         'subject_id': subject_id,
         'student_id': student['id'],
-        'activity_id':activity_id
+        'activity_id': activity_id
       });
       var response =
           await Dio().post('${urlapi}api/listhistoryactivity', data: formData);
@@ -95,92 +95,103 @@ class _ActivityHistoryState extends State<ActivityHistory> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width * .7,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: ListView(
         children: [
-          Row(
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                translate('Score') + ": ",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    translate('Score') + ": ",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '${activity_name}',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              Text(
-                '${activity_name}',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                translate('Name') + ": ",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '${student['first_name']}' +
-                    " " +
-                    '${student['last_name']}' +
-                    ', ' +
-                    '${class_room_name}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                ", " + translate('Subject') + ": " + translate(subject_title),
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          Divider(
-            color: Colors.red,
-          ),
-          isloading
-              ? SpinKitWave(
-                  size: 30.0,
-                  itemBuilder: (BuildContext context, int index) {
-                    return DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: index.isEven ? Colors.blue : Colors.white,
-                      ),
-                    );
-                  },
-                )
-              : GridView.count(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  primary: false,
-                  padding: const EdgeInsets.all(20),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 5,
-                  children: <Widget>[
-                    for (var item in dataListHistoryActivityScore)
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          children: [
-                            Text(item['date'].substring(0,item['date'].length-8)),
-                            Divider(
-                              color: Colors.white,
-                            ),
-                            Icon(
-                              item['send'] == 1
-                                  ? Icons.done_outline
-                                  : Icons.close_sharp,
-                              color: Colors.black,
-                              size: 50,
-                            ),
-                            item['send'] == 1
-                                ? Text(translate('Sent/Joined'))
-                                : Text(translate('Not send/join')),
-                            Text(translate('Score')+": "+item['score'].toString()),
-                          ],
-                        ),
-                        color: item['send'] == 1
-                            ? Colors.teal
-                            : Colors.red,
-                      ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Text(
+                      translate('Name') + ": ",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${student['first_name']}' +
+                          " " +
+                          '${student['last_name']}' +
+                          ', ' +
+                          '${class_room_name}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      ", " + translate('Subject') + ": " + translate(subject_title),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
+              ),
+              Divider(
+                color: Colors.red,
+              ),
+              isloading
+                  ? SpinKitWave(
+                      size: 30.0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: index.isEven ? Colors.blue : Colors.white,
+                          ),
+                        );
+                      },
+                    )
+                  : GridView.count(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      primary: false,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: activityCrossAxisCount,
+                      children: <Widget>[
+                        for (var item in dataListHistoryActivityScore)
+                          SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  Text(item['date']
+                                      .substring(0, item['date'].length - 8)),
+                                  Divider(
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    item['send'] == 1
+                                        ? Icons.done_outline
+                                        : Icons.close_sharp,
+                                    color: Colors.black,
+                                    size: 50,
+                                  ),
+                                  item['send'] == 1
+                                      ? Text(translate('Sent/Joined'))
+                                      : Text(translate('Not send/join')),
+                                  Text(translate('Score') +
+                                      ": " +
+                                      item['score'].toString()),
+                                ],
+                              ),
+                              color: item['send'] == 1 ? Colors.teal : Colors.red,
+                            ),
+                          ),
+                      ],
+                    ),
+            ],
+          ),
         ],
       ),
     );

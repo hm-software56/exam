@@ -67,7 +67,7 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.green, spreadRadius: 2),
+                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
                     ],
                   ),
                   child: Column(
@@ -137,7 +137,7 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.green, spreadRadius: 2),
+                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
                     ],
                   ),
                   child: Column(

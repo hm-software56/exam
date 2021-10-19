@@ -234,7 +234,7 @@ class _SubjectState extends State<Subject> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.green, spreadRadius: 2),
+                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
                     ],
                   ),
                   child: Column(
@@ -288,10 +288,12 @@ class _SubjectState extends State<Subject> {
                             child: TextFormField(
                               controller: scoreClassRoomController,
                               decoration: InputDecoration(
-                                  labelText: translate('Input score class room')),
+                                  labelText:
+                                      translate('Input score class room')),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return translate('Please enter score class room');
+                                  return translate(
+                                      'Please enter score class room');
                                 }
                                 return null;
                               },
@@ -303,10 +305,12 @@ class _SubjectState extends State<Subject> {
                               child: TextFormField(
                                 controller: scoreActivityController,
                                 decoration: InputDecoration(
-                                    labelText: translate('Input score activity')),
+                                    labelText:
+                                        translate('Input score activity')),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return translate('Please enter score activity');
+                                    return translate(
+                                        'Please enter score activity');
                                   }
                                   return null;
                                 },
@@ -380,122 +384,144 @@ class _SubjectState extends State<Subject> {
                             )
                           : Table(
                               //defaultColumnWidth: FixedColumnWidth(120.0),
-                              columnWidths: {
-                                0: FlexColumnWidth(),
-                                2: FixedColumnWidth(140),
-                                3: FixedColumnWidth(140),
-                                4: FixedColumnWidth(140),
-                                5: FixedColumnWidth(100),
-                                6: FixedColumnWidth(100),
-                              },
+                              columnWidths: subJectColumnWidths,
                               border: TableBorder.all(
                                   color: Colors.black,
                                   style: BorderStyle.solid,
                                   width: 1),
                               children: [
                                 TableRow(children: [
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text(
-                                        translate('Class room'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Text(
+                                          translate('Class room'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      ]),
+                                    ),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Subject'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text(
-                                        translate('Subject'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Score class room'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text(
-                                        translate('Score class room'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Score activity'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text(
-                                        translate('Score activity'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Score exam'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text(
-                                        translate('Score exam'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.lightBlue,
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text(
+                                          translate('Students'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text(
-                                        translate('Students'),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )
-                                  ]),
+                                      )
+                                    ]),
+                                  ),
                                   Column(children: [Text('')]),
                                 ]),
                                 for (var item in dataListSubject)
                                   TableRow(children: [
-                                    Column(children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
-                                          '${item['classRoom']['class_room_name']}',
-                                        ),
-                                      )
-                                    ]),
-                                    Column(children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
-                                          '${item['title']}',
-                                        ),
-                                      )
-                                    ]),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                          child: Text(
+                                            '${item['classRoom']['class_room_name']}',
+                                          ),
+                                        )
+                                      ]),
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                          child: Text(
+                                            '${item['title']}',
+                                          ),
+                                        )
+                                      ]),
+                                    ),
                                     Column(children: [
                                       Container(
                                         alignment: Alignment.center,
@@ -526,67 +552,73 @@ class _SubjectState extends State<Subject> {
                                         ),
                                       )
                                     ]),
-                                    Column(children: [
-                                      Container(
-                                          alignment: Alignment.centerLeft,
-                                          padding:
-                                              EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                          child: TextButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Student(
-                                                            data: item[
-                                                                'classRoom'])),
-                                              );
-                                            },
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                    '${item['classRoom']['count_student']}'),
-                                                Icon(Icons
-                                                    .settings_accessibility)
-                                              ],
-                                            ),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.black12),
-                                            ),
-                                          ))
-                                    ]),
-                                    Column(children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            5, 2, 5, 2),
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                deleteSubject(
-                                                    int.parse(item['id']));
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Container(
+                                            alignment: Alignment.centerLeft,
+                                            padding:
+                                                EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                            child: TextButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Student(
+                                                              data: item[
+                                                                  'classRoom'])),
+                                                );
                                               },
-                                              child: Icon(
-                                                Icons.remove_circle,
-                                                color: Colors.red,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                      '${item['classRoom']['count_student']}'),
+                                                  Icon(Icons
+                                                      .settings_accessibility)
+                                                ],
                                               ),
-                                            ),
-                                            Text(' | '),
-                                            InkWell(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.black12),
+                                              ),
+                                            ))
+                                      ]),
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 2, 5, 2),
+                                          child: Row(
+                                            children: [
+                                              InkWell(
                                                 onTap: () {
-                                                  selecteditSubject(item);
+                                                  deleteSubject(
+                                                      int.parse(item['id']));
                                                 },
                                                 child: Icon(
-                                                  Icons.border_color,
-                                                  color: Colors.blueAccent,
-                                                )),
-                                          ],
-                                        ),
-                                      )
-                                    ]),
+                                                  Icons.remove_circle,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              Text(' | '),
+                                              InkWell(
+                                                  onTap: () {
+                                                    selecteditSubject(item);
+                                                  },
+                                                  child: Icon(
+                                                    Icons.border_color,
+                                                    color: Colors.blueAccent,
+                                                  )),
+                                            ],
+                                          ),
+                                        )
+                                      ]),
+                                    ),
                                   ]),
                               ],
                             ),

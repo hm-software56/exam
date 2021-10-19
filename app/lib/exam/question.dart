@@ -303,13 +303,12 @@ class _QuestionState extends State<Question> {
                 padding: EdgeInsets.all(10.0),
                 color: Colors.white,
                 child: Container(
-                  
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.green, spreadRadius: 2),
+                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
                     ],
                   ),
                   child: Form(
@@ -317,20 +316,23 @@ class _QuestionState extends State<Question> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          translate('Class Room') +
-                              ": " +
-                              class_room_name +
-                              ", " +
-                              translate('Suject Exam') +
-                              ": " +
-                              subject_title +
-                              ", " +
-                              translate('Exam Code') +
-                              ": " +
-                              data['url_answer'],
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            translate('Class Room') +
+                                ": " +
+                                class_room_name +
+                                ", " +
+                                translate('Suject Exam') +
+                                ": " +
+                                subject_title +
+                                ", " +
+                                translate('Exam Code') +
+                                ": " +
+                                data['url_answer'],
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
                         ),
                         Divider(
                           color: Colors.red,
@@ -558,12 +560,7 @@ class _QuestionState extends State<Question> {
                         listDataQuestion.length == 0
                             ? SizedBox()
                             : Table(
-                                columnWidths: {
-                                  0: FixedColumnWidth(70),
-                                  1: FlexColumnWidth(),
-                                  2: FixedColumnWidth(100),
-                                  3: FixedColumnWidth(100),
-                                },
+                                columnWidths: questionColumnWidths,
                                 border: TableBorder.all(
                                     color: Colors.black,
                                     style: BorderStyle.solid,
@@ -632,8 +629,7 @@ class _QuestionState extends State<Question> {
       i = 0;
     }
     return TableRow(children: [
-      Column(
-        children: [
+      Column(children: [
         Container(
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
@@ -644,12 +640,15 @@ class _QuestionState extends State<Question> {
         )
       ]),
       Column(children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: Text(
-            '${item['question']}',
-            style: TextStyle(),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: Text(
+              '${item['question']}',
+              style: TextStyle(),
+            ),
           ),
         )
       ]),

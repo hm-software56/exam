@@ -703,11 +703,7 @@ class _ActivityState extends State<Activity> {
 /**======================== List student for not Q&A Class romm ================= */
   Widget tableListStudentSeleted() {
     return Table(
-      columnWidths: {
-        0: FixedColumnWidth(100),
-        1: FlexColumnWidth(),
-        2: FixedColumnWidth(160),
-      },
+      columnWidths: activityColumnWidths,
       border: TableBorder.all(
           color: Colors.black, style: BorderStyle.solid, width: 1),
       children: [
@@ -755,39 +751,45 @@ class _ActivityState extends State<Activity> {
                 child: textFieldAnswerScore(item),
               )
             ]),
-            Column(children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                child: Text(
-                    '${item['first_name']}' + " " + '${item['last_name']}'),
-              )
-            ]),
-            Column(children: [
-              TextButton(
-                onPressed: () => showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                      content: ActivityHistory(
-                          activity_id: activity_id,
-                          activity_name: activity_name,
-                          class_room_id: class_room_id,
-                          class_room_name: class_room_names,
-                          subject_id: subject_id,
-                          subject_title: subject_titles,
-                          student: item)),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                  child: Text(
+                      '${item['first_name']}' + " " + '${item['last_name']}'),
+                )
+              ]),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(children: [
+                TextButton(
+                  onPressed: () => showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                        content: ActivityHistory(
+                            activity_id: activity_id,
+                            activity_name: activity_name,
+                            class_room_id: class_room_id,
+                            class_room_name: class_room_names,
+                            subject_id: subject_id,
+                            subject_title: subject_titles,
+                            student: item)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.history,
+                        size: 20,
+                      ),
+                      Text(translate('History Score'))
+                    ],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.history,
-                      size: 20,
-                    ),
-                    Text(translate('History Score'))
-                  ],
-                ),
-              ),
-            ]),
+              ]),
+            ),
           ]),
       ],
     );
@@ -817,7 +819,7 @@ class _ActivityState extends State<Activity> {
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
               boxShadow: const [
-                BoxShadow(color: Colors.green, spreadRadius: 2),
+                BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
               ],
             ),
             child: Column(
@@ -947,14 +949,17 @@ class _ActivityState extends State<Activity> {
                                       color: Colors.red,
                                     ),
                                     StreamBuilder(
-        stream: Stream.periodic(const Duration(seconds: 1)),
-        builder: (context, snapshot) {
-          return Center(
-            child: Text(DateFormat('MM/dd/yyyy hh:mm:ss').format(DateTime.now()),
-            ),
-          );
-        },
-      ),
+                                      stream: Stream.periodic(
+                                          const Duration(seconds: 1)),
+                                      builder: (context, snapshot) {
+                                        return Center(
+                                          child: Text(
+                                            DateFormat('MM/dd/yyyy hh:mm:ss')
+                                                .format(DateTime.now()),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                     Row(
                                       children: [
                                         Expanded(
@@ -1009,10 +1014,12 @@ class _ActivityState extends State<Activity> {
                                                 decoration: BoxDecoration(
                                                     shape: BoxShape.circle),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Icon(
-                                                      Icons.stop_circle_outlined,
+                                                      Icons
+                                                          .stop_circle_outlined,
                                                       size: 50,
                                                     ),
                                                     Text(

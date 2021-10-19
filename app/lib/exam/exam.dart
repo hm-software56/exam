@@ -361,7 +361,8 @@ class _ExamState extends State<Exam> {
           await Dio().post('${urlapi}api/duplicateexam', data: formData);
       if (response.statusCode == 200 && response.data != null) {
         listDataExam();
-        AlertDone(translate('Successfull Duplicated.!\nYou should edit date class exam'));
+        AlertDone(translate(
+            'Successfull Duplicated.!\nYou should edit date class exam'));
         codeGenerateRandomString(10);
       }
     } catch (e) {
@@ -392,13 +393,13 @@ class _ExamState extends State<Exam> {
           color: Colors.white,
           child: Container(
             //height: MediaQuery.of(context).size.height - 90,
-           // width: MediaQuery.of(context).size.width,
+            // width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
               boxShadow: const [
-                BoxShadow(color: Colors.green, spreadRadius: 2),
+               BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
               ],
             ),
             child: Form(
@@ -663,89 +664,99 @@ class _ExamState extends State<Exam> {
                     color: Colors.red,
                   ),
                   Table(
-                    columnWidths: {
-                      0: FlexColumnWidth(),
-                      1: FlexColumnWidth(),
-                      2: FixedColumnWidth(90),
-                      3: FixedColumnWidth(120),
-                      4: FixedColumnWidth(140),
-                      5: FixedColumnWidth(70),
-                      6: FixedColumnWidth(100),
-                    },
+                     columnWidths:examColumnWidths,
                     border: TableBorder.all(
                         color: Colors.black,
                         style: BorderStyle.solid,
                         width: 1),
                     children: [
                       TableRow(children: [
-                        Column(children: [
-                          Container(
-                            color: Colors.lightBlue,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                            child: Text(
-                              translate('Class room'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ]),
-                        Column(children: [
-                          Container(
-                            color: Colors.lightBlue,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                            child: Text(
-                              translate('Subject'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ]),
-                        Column(children: [
-                          Container(
-                            color: Colors.lightBlue,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                            child: Text(
-                              translate('Date Exam'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ]),
-                        Column(children: [
-                          Container(
-                            color: Colors.lightBlue,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                            child: Text(
-                              translate('Time Exam'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ]),
-                        Column(children: [
-                          Container(
-                            color: Colors.lightBlue,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                            child: Text(
-                              translate('Code Exam'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ]),
-                        Column(children: [
-                          Container(
-                            color: Colors.lightBlue,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                            child: Text(
-                              translate('Question'),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(children: [
+                            Container(
+                              color: Colors.lightBlue,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                              child: Text(
+                                translate('Class room'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          )
-                        ]),
+                            )
+                          ]),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(children: [
+                            Container(
+                              color: Colors.lightBlue,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                              child: Text(
+                                translate('Subject'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ]),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(children: [
+                            Container(
+                              color: Colors.lightBlue,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                              child: Text(
+                                translate('Date Exam'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ]),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(children: [
+                            Container(
+                              color: Colors.lightBlue,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                              child: Text(
+                                translate('Time Exam'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ]),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(children: [
+                            Container(
+                              color: Colors.lightBlue,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                              child: Text(
+                                translate('Code Exam'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ]),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(children: [
+                            Container(
+                              color: Colors.lightBlue,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                              child: Text(
+                                translate('Question'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          ]),
+                        ),
                         Column(children: [
                           Text('', style: TextStyle(fontSize: 20.0))
                         ]),
@@ -768,55 +779,70 @@ class _ExamState extends State<Exam> {
     var endExam = end_time.difference(now).inMinutes;
 
     return TableRow(children: [
-      Column(children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: Text(
-            '${item['subject']['classRoom']['class_room_name']}',
-            style: TextStyle(),
-          ),
-        )
-      ]),
-      Column(children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: Text(
-            '${item['subject']['title']}',
-            style: TextStyle(),
-          ),
-        )
-      ]),
-      Column(children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: Text('${item['start_time'].toString().substring(0, 10)}'),
-        )
-      ]),
-      Column(children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: Text(
-            '${item['start_time'].toString().substring(10, 16)}' +
-                ' -' +
-                '${item['end_time'].toString().substring(10, 16)}',
-            style: TextStyle(),
-          ),
-        )
-      ]),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: Text(
+              '${item['subject']['classRoom']['class_room_name']}',
+              style: TextStyle(),
+            ),
+          )
+        ]),
+      ),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: Text(
+              '${item['subject']['title']}',
+              style: TextStyle(),
+            ),
+          )
+        ]),
+      ),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: Text('${item['start_time'].toString().substring(0, 10)}'),
+          )
+        ]),
+      ),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: Text(
+              '${item['start_time'].toString().substring(10, 16)}' +
+                  ' -' +
+                  '${item['end_time'].toString().substring(10, 16)}',
+              style: TextStyle(),
+            ),
+          )
+        ]),
+      ),
       Column(children: [
         Row(
           children: [
             Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                child: Text(
-                  '${item['url_answer']}',
-                  style: TextStyle(color: Colors.red),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                  child: Text(
+                    '${item['url_answer']}',
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ),
             ),
@@ -860,44 +886,47 @@ class _ExamState extends State<Exam> {
               ),
             ))
       ]),
-      Column(children: [
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-          child: endExam <= 0
-              ? InkWell(
-                  onTap: () {
-                    duplicateExam(item);
-                  },
-                  child: Icon(
-                    Icons.control_point_duplicate_outlined,
-                    color: Colors.grey,
-                  ),
-                )
-              : Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        deleteExamRoom(item);
-                      },
-                      child: Icon(
-                        Icons.remove_circle,
-                        color: Colors.red,
-                      ),
+       SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(children: [
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+            child: endExam <= 0
+                ? InkWell(
+                    onTap: () {
+                      duplicateExam(item);
+                    },
+                    child: Icon(
+                      Icons.control_point_duplicate_outlined,
+                      color: Colors.grey,
                     ),
-                    Text(' | '),
-                    InkWell(
+                  )
+                : Row(
+                    children: [
+                      InkWell(
                         onTap: () {
-                          selecteditExam(item);
+                          deleteExamRoom(item);
                         },
                         child: Icon(
-                          Icons.border_color,
-                          color: Colors.blueAccent,
-                        )),
-                  ],
-                ),
-        )
-      ]),
+                          Icons.remove_circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                      Text(' | '),
+                      InkWell(
+                          onTap: () {
+                            selecteditExam(item);
+                          },
+                          child: Icon(
+                            Icons.border_color,
+                            color: Colors.blueAccent,
+                          )),
+                    ],
+                  ),
+          )
+        ]),
+      ),
     ]);
   }
 }

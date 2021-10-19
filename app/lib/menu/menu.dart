@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:avatar_view/avatar_view.dart';
 import 'package:exam/exam/exam.dart';
+import 'package:exam/report/report.dart';
 import '../absent/absent.dart';
 import '../activity/activity.dart';
 import '../classroom/class_roor.dart';
@@ -115,7 +116,7 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.room_sharp,
+                  Icons.groups,
                   color: Colors.blueGrey,
                 ),
               ],
@@ -137,7 +138,7 @@ class _MenuState extends State<Menu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.subject_outlined,
+                  Icons.auto_stories,
                   color: Colors.blueGrey,
                 ),
               ],
@@ -217,6 +218,28 @@ class _MenuState extends State<Menu> {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => Exam()),
+                  (route) => false);
+            },
+          ),
+          ListTile(
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.bar_chart,
+                  color: Colors.blueGrey,
+                ),
+              ],
+            ),
+            trailing: Icon(Icons.navigate_next),
+            title: Text(
+              translate('Report'),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => Report()),
                   (route) => false);
             },
           ),

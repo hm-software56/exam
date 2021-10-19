@@ -63,7 +63,7 @@ class _AbsentState extends State<Absent> {
     for (var item in dataList) {
       if (item['class_room_name'] == class_room_name) {
         class_room_id = item['id'];
-        class_room_names=class_room_name;
+        class_room_names = class_room_name;
         setState(() {
           class_room_id;
           dataListStudent = [];
@@ -111,7 +111,7 @@ class _AbsentState extends State<Absent> {
       if (item['title'] == subject_title) {
         setState(() {
           subject_id = item['id'];
-          subject_titles=subject_title;
+          subject_titles = subject_title;
         });
       }
     }
@@ -166,6 +166,7 @@ class _AbsentState extends State<Absent> {
         }
       }
     } catch (e) {
+      print(e);
       print('Wrong check generadate date');
       //AlertLoss();
     }
@@ -300,7 +301,7 @@ class _AbsentState extends State<Absent> {
   /**============== CheckBox ============= */
   Widget checkBoxFieldReason(var student) {
     bool ischecked = false;
-    bool is_come=true;
+    bool is_come = true;
     for (var absent in absentListData) {
       if (absent['student_id'] == student['id']) {
         if (absent['reason'] == 1) {
@@ -386,7 +387,7 @@ class _AbsentState extends State<Absent> {
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
               boxShadow: const [
-                BoxShadow(color: Colors.green, spreadRadius: 2),
+                BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
               ],
             ),
             child: Column(
@@ -476,155 +477,177 @@ class _AbsentState extends State<Absent> {
                           ),
                           Table(
                             //defaultColumnWidth: FixedColumnWidth(120.0),
-                            columnWidths: {
-                              0: FixedColumnWidth(70),
-                              1: FixedColumnWidth(90),
-                              2: FlexColumnWidth(),
-                              3: FixedColumnWidth(110),
-                            },
+                            columnWidths:abSentColumnWidths,
                             border: TableBorder.all(
                                 color: Colors.black,
                                 style: BorderStyle.solid,
                                 width: 1),
                             children: [
                               TableRow(children: [
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.lightBlue,
-                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: Text(
-                                      translate('Check Name'),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Check Name'),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ]),
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.lightBlue,
-                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: Text(
-                                      translate('Reason'),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                    )
+                                  ]),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Reason'),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ]),
-
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.lightBlue,
-                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: Text(
-                                      translate('Full name'),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                    )
+                                  ]),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.lightBlue,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: Text(
+                                        translate('Full name'),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ]),
-                                Column(children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.green,
-                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                    child: InkWell(
-                                      onTap: () {
-                                        if (generatedDate) {
-                                          deleteGenerateDate();
-                                        } else {
-                                          generateDate();
-                                        }
-                                      },
-                                      child: generatedDate
-                                          ? Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.restore_page_sharp,
-                                                  color: Colors.red,
-                                                ),
-                                                Text(
-                                                  translate('Remove Form'),
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
+                                    )
+                                  ]),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.green,
+                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (generatedDate) {
+                                            deleteGenerateDate();
+                                          } else {
+                                            generateDate();
+                                          }
+                                        },
+                                        child: generatedDate
+                                            ? Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.restore_page_sharp,
+                                                    color: Colors.red,
                                                   ),
-                                                ),
-                                              ],
-                                            )
-                                          : Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.add_box_sharp,
-                                                  color: Colors.deepOrange,
-                                                ),
-                                                Text(
-                                                  translate('Generate From'),
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
+                                                  Text(
+                                                    translate('Remove Form'),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                  )
-                                ]),
+                                                ],
+                                              )
+                                            : Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.add_box_sharp,
+                                                    color: Colors.deepOrange,
+                                                  ),
+                                                  Text(
+                                                    translate('Generate From'),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                      ),
+                                    )
+                                  ]),
+                                ),
                               ]),
-                              
                               for (var item in dataListStudent)
                                 TableRow(children: [
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Center(child: checkBoxField(item)),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Center(child: checkBoxFieldReason(item)),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                      child: Text('${item['first_name']}' +
-                                          " " +
-                                          '${item['last_name']}'),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    TextButton(
-                                      onPressed: () => showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                                content: AbsentHistiry(
-                                                    class_room_id:
-                                                        class_room_id,
-                                                    class_room_name:class_room_names,
-                                                    subject_id: subject_id,
-                                                    subject_title:subject_titles,
-                                                    student: item)),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Center(child: checkBoxField(item)),
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Center(
+                                            child: checkBoxFieldReason(item)),
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child: Text('${item['first_name']}' +
+                                            " " +
+                                            '${item['last_name']}'),
+                                      )
+                                    ]),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Column(children: [
+                                      TextButton(
+                                        onPressed: () => showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                                  content: AbsentHistiry(
+                                                      class_room_id:
+                                                          class_room_id,
+                                                      class_room_name:
+                                                          class_room_names,
+                                                      subject_id: subject_id,
+                                                      subject_title:
+                                                          subject_titles,
+                                                      student: item)),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.history,
+                                              size: 20,
+                                            ),
+                                            Text(translate('History'))
+                                          ],
+                                        ),
                                       ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.history,
-                                            size: 20,
-                                          ),
-                                          Text(translate('History'))
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
+                                    ]),
+                                  ),
                                 ]),
                             ],
                           ),

@@ -824,6 +824,54 @@ class ApiController extends \yii\web\Controller
         return $exam;
     }
 
+    public function actionSumscoreclassroom(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $subject=Subject::find()->where(['id'=>Yii::$app->request->post('subject_id')])->one();
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+        $countDateAbsent=Absent::find()
+        ->where(['student_id'=>$student['id']])
+        ->andWhere(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->count();
+
+        $sumscoreclassroom=Absent::find()
+        ->where(['student_id'=>$student['id']])
+        ->andWhere(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['absent'=>0])
+        ->andWhere(['reason'=>0])
+        ->count();
+        $result[$student['id']]=round($subject->score_class_room-(($subject->score_class_room*$sumscoreclassroom)/$countDateAbsent),0);
+        }
+        return $result;
+    }
+
+    public function actionSumscoreactivity(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $subject=Subject::find()->where(['id'=>Yii::$app->request->post('subject_id')])->one();
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+        $sumScoreActivity=Activity::find()
+        ->where(['student_id'=>$student['id']])
+        ->andWhere(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->sum('score');
+        if(empty($sumScoreActivity))
+        {
+            $sumScoreActivity=0;
+        }
+        $result[$student['id']]=$sumScoreActivity;
+        }
+        return $result;
+    }
+
+
     public function checkToken($tokenID)
     {
         if ($tokenID) {
