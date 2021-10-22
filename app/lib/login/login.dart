@@ -1,5 +1,6 @@
 import 'package:avatar_view/avatar_view.dart';
 import 'package:dio/dio.dart';
+import 'package:exam/exam/exam_student.dart';
 import '../config/config.dart';
 import '../home/home.dart';
 import '../register/register.dart';
@@ -23,16 +24,14 @@ class _LoginState extends State<Login> {
   final loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  CheckPlatform()
-  {
+  CheckPlatform() {
     try {
       return Platform.operatingSystem; //in your code
-  } catch (e) {
-    return null; //in your code
-  }
+    } catch (e) {
+      return null; //in your code
+    }
   }
 
-  
 /*================= Switch language =============*/
   Future<void> SwitchLang(var lang) async {
     changeLocale(context, lang);
@@ -132,7 +131,8 @@ class _LoginState extends State<Login> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Center(child: Text(translate('Management Student System')))),
+        appBar: AppBar(
+            title: Center(child: Text(translate('Management Student System')))),
         body: Center(
           child: isloading
               ? Container(
@@ -158,7 +158,13 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          color: Colors.white,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(color: Colors.blue, spreadRadius: 2),
+                            ],
+                          ),
                           padding: EdgeInsets.all(10),
                           child: Column(
                             children: [
@@ -360,7 +366,14 @@ class _LoginState extends State<Login> {
                                   const Spacer(),
                                   Expanded(
                                     child: InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ExamStudent()),
+                                        );
+                                      },
                                       child: Align(
                                           alignment: Alignment.topRight,
                                           child: Text(

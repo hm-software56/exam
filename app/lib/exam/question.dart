@@ -631,7 +631,7 @@ class _QuestionState extends State<Question> {
     return TableRow(children: [
       Column(children: [
         Container(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
           child: Text(
             '${number.toString()}',
@@ -639,19 +639,18 @@ class _QuestionState extends State<Question> {
           ),
         )
       ]),
-      Column(children: [
-        SingleChildScrollView(
+      SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
+        child: Column(children: [
+          Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
             child: Text(
               '${item['question']}',
-              style: TextStyle(),
             ),
-          ),
-        )
-      ]),
+          )
+        ]),
+      ),
       Column(children: [
         Container(
             alignment: Alignment.centerLeft,

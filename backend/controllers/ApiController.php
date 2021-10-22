@@ -12,6 +12,8 @@ use \app\models\Activity;
 use \app\models\Exam;
 use \app\models\Question;
 use \app\models\Answer;
+use \app\models\StudentAnswer;
+use yii\db\Expression;
 use Yii;
 use yii\web\UploadedFile;
 class ApiController extends \yii\web\Controller
@@ -869,6 +871,85 @@ class ApiController extends \yii\web\Controller
         $result[$student['id']]=$sumScoreActivity;
         }
         return $result;
+    }
+
+    public function actionCheckexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $checkExam=Exam::find()
+        ->joinWith(['subject'])
+        ->where(['url_answer'=>Yii::$app->request->post('code_exam')])
+        ->asArray()
+        ->one();
+        if($checkExam){
+            $student=Student::find()
+            ->where(['class_room_id'=>$checkExam['subject']['class_room_id']])
+            ->andWhere(['student_code'=>Yii::$app->request->post('code_student')])
+            ->one();
+            if($student)
+            {
+                $result=['exam'=>$checkExam,'student'=>$student];
+            }
+        }
+        return $result;
+    }
+
+    public function actionStudentexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $question=Question::find()
+        ->joinWith(['answers'])
+        ->where(['exam_id'=>Yii::$app->request->post('exam_id')])
+        ->andWhere(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->asArray()
+         ->orderBy(new Expression('rand()'))
+        ->all();
+        return $question;
+    }
+
+    public function actionAnswerquestion(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $st_answer=StudentAnswer::find()
+        ->where(['question_id'=>Yii::$app->request->post('question_id')])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->one();
+        if(!$st_answer)
+        {
+            $st_answer=new StudentAnswer();
+        }
+        $st_answer->question_id=Yii::$app->request->post('question_id');
+        $st_answer->student_id=Yii::$app->request->post('student_id');
+        $st_answer->answer_id=Yii::$app->request->post('answer_id');
+        $st_answer->save();
+        return $st_answer;
+    }
+
+    public function actionListstudentanswer(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $aa=[];
+        foreach(Yii::$app->request->post('question') as $question)
+        {
+        $st_answer=StudentAnswer::find()
+        ->where(['question_id'=>$question['id']])
+        ->andWhere(['student_id'=>Yii::$app->request->post('student_id')])
+        ->one();
+        if($st_answer)
+        {
+            $aa[strval($question['id'])]=strval($st_answer['answer_id']);
+        }
+        }
+        return $aa;
     }
 
 
