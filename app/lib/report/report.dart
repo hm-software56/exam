@@ -129,6 +129,9 @@ class _ReportState extends State<Report> {
     Loading();
     setState(() {
       dataListStudent = [];
+      dataScoreExam = null;
+      dataScoreActivity = null;
+      dataScoreClassRoom = null;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -154,6 +157,7 @@ class _ReportState extends State<Report> {
         dataListStudent = response.data;
         listScoreClassRoom(dataListStudent);
         listScoreActivity(dataListStudent);
+        listScoreExam(dataListStudent);
         setState(() {
           dataListStudent;
         });
@@ -215,6 +219,34 @@ class _ReportState extends State<Report> {
       }
     } catch (e) {
       print('Wrong List sum score activity');
+      //AlertLoss();
+    }
+  }
+
+  /**=========== List Score Exam ===================*/
+  var dataScoreExam;
+  Future<void> listScoreExam(var students) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final apitoken = await prefs.getString('apitoken');
+    final user_id = await prefs.getInt('user_id');
+    try {
+      var formData = FormData.fromMap({
+        'tokenID': apitoken,
+        'teacher_id': user_id,
+        'students': students,
+        'subject_id': subject_id
+      });
+      var response =
+          await Dio().post('${urlapi}api/sumscoreexam', data: formData);
+      if (response.statusCode == 200 && response.data != null) {
+        dataScoreExam = response.data;
+        setState(() {
+          dataScoreExam;
+        });
+      }
+    } on DioError catch (e) {
+      print(e.response);
+      print('Wrong List sum score exam');
       //AlertLoss();
     }
   }
@@ -527,22 +559,26 @@ class _ReportState extends State<Report> {
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
           child: Center(
-              child: dataScoreActivity == null
+              child: dataScoreExam == null
                   ? SpinKitWave(
                       color: Colors.blue,
                       size: 10.0,
                     )
-                  : Text('0')),
+                  : Text('${dataScoreExam[item['id'].toString()].toString()}')),
         )
       ]),
       Column(children: [
-        dataScoreActivity == null || dataScoreClassRoom == null
+        dataScoreActivity == null ||
+                dataScoreClassRoom == null ||
+                dataScoreExam == null
             ? SpinKitWave(
                 color: Colors.blue,
                 size: 10.0,
               )
-            : scoreGPA(dataScoreClassRoom[item['id'].toString()],
-                dataScoreActivity[item['id'].toString()], 0)
+            : scoreGPA(
+                dataScoreClassRoom[item['id'].toString()],
+                dataScoreActivity[item['id'].toString()],
+                dataScoreExam[item['id'].toString()])
       ]),
     ]);
   }

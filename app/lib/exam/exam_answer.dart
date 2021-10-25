@@ -25,6 +25,7 @@ class _ExamAnswerState extends State<ExamAnswer> {
   _ExamAnswerState(this.exam, this.student);
 
   var dataQuestion = [];
+  int countQuestion=0;
   Future<void> listDataQuestion() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -38,9 +39,11 @@ class _ExamAnswerState extends State<ExamAnswer> {
           await Dio().post('${urlapi}api/studentexam', data: formData);
       if (response.statusCode == 200 && response.data.length > 1) {
         dataQuestion = response.data;
+        countQuestion=dataQuestion.length;
         listDataStudentAnswer(dataQuestion);
         setState(() {
           dataQuestion;
+          countQuestion;
         });
       }
     } catch (e) {
@@ -128,17 +131,18 @@ class _ExamAnswerState extends State<ExamAnswer> {
         'tokenID': apitoken,
         'question_id': question_id,
         'answer_id': answer_id,
-        'student_id': student['id']
+        'student_id': student['id'],
+        'count_question':countQuestion,
+        'exam_id':exam['id']
       });
       var response =
           await Dio().post('${urlapi}api/answerquestion', data: formData);
-      if (response.statusCode == 200 && response.data.length > 1) {
-        dataQuestion = response.data;
-        setState(() {
-          dataQuestion;
-        });
+      if (response.statusCode == 200) {
+          print('answer');
+        //print(response.data);
       }
-    } catch (e) {
+    } on DioError catch (e) {
+      print(e.response);
       print('Wrong Answer Question');
     }
   }

@@ -369,6 +369,7 @@ class ApiController extends \yii\web\Controller
         if($as)
         {
             $as->absent=Yii::$app->request->post('absent');
+            $as->reason=0;
             if(!$as->save())
             {
                 print_r($as->getErrors());exit;
@@ -620,7 +621,9 @@ class ApiController extends \yii\web\Controller
         $exam->end_time=Yii::$app->request->post('end_date');
         $exam->time_answer=Yii::$app->request->post('time_answer');
         $exam->url_answer=Yii::$app->request->post('url_answer');
-        $exam->save();
+        if($exam->save()){
+            Question::updateAll(['subject_id' => $exam->subject_id], ['exam_id' =>$exam->id]);
+        }
         return $exam;
     }
     public function actionDeleteexam(){
@@ -857,7 +860,7 @@ class ApiController extends \yii\web\Controller
             return $token;
         }
         $result=[];
-        $subject=Subject::find()->where(['id'=>Yii::$app->request->post('subject_id')])->one();
+        //$subject=Subject::find()->where(['id'=>Yii::$app->request->post('subject_id')])->one();
         foreach(Yii::$app->request->post('students') as $student)
         {
         $sumScoreActivity=Activity::find()
@@ -872,6 +875,47 @@ class ApiController extends \yii\web\Controller
         }
         return $result;
     }
+
+    public function actionSumscoreexam(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $result=[];
+        $subject=Subject::find()->where(['id'=>Yii::$app->request->post('subject_id')])->one();
+        foreach(Yii::$app->request->post('students') as $student)
+        {
+        $countQuestion=StudentAnswer::find()
+        ->joinWith(['question'])
+        ->where(['student_id'=>$student['id']])
+        ->andWhere(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->orderBy('student_answer.id DESC')
+        ->one();
+        if($countQuestion){
+            $cq=$countQuestion->count_question;
+            $exam_id=$countQuestion->exam_id;
+        }else{
+            $cq=1;
+            $exam_id=0;
+        }
+
+        $sumScoreExam=StudentAnswer::find()
+        ->joinWith(['question'])
+        ->where(['student_id'=>$student['id']])
+        ->andWhere(['subject_id'=>Yii::$app->request->post('subject_id')])
+        ->andWhere(['answer_true'=>1])
+        ->andWhere(['student_answer.exam_id'=>$exam_id])
+        ->count();
+        
+        if(empty($sumScoreExam))
+        {
+            $sumScoreExam=0;
+        }
+        $result[$student['id']]=round(($sumScoreExam*$subject->score_exam)/$cq,0);
+        }
+        return $result;
+    }
+
 
     public function actionCheckexam(){
         $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
@@ -925,9 +969,22 @@ class ApiController extends \yii\web\Controller
         {
             $st_answer=new StudentAnswer();
         }
+        $checkAnswerCorrect=Answer::find()
+        ->where(['id'=>Yii::$app->request->post('answer_id')])
+        ->andWhere(['question_id'=>Yii::$app->request->post('question_id')])
+        ->andWhere(['answer_true'=>1])
+        ->one();
+        if($checkAnswerCorrect)
+        {
+            $st_answer->answer_true=1; // is Correct
+        }else{
+            $st_answer->answer_true=0;// is Incorrect
+        }
         $st_answer->question_id=Yii::$app->request->post('question_id');
         $st_answer->student_id=Yii::$app->request->post('student_id');
         $st_answer->answer_id=Yii::$app->request->post('answer_id');
+        $st_answer->count_question=Yii::$app->request->post('count_question');
+        $st_answer->exam_id=Yii::$app->request->post('exam_id');
         $st_answer->save();
         return $st_answer;
     }

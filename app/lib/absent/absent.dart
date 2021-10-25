@@ -140,6 +140,10 @@ class _AbsentState extends State<Absent> {
   /**====================Check Generate date ============ */
   List absentListData = [];
   Future<void> checkGenerateDate(var dataListStudent) async {
+    setState(() {
+      checkedReason.isEmpty;
+      checked.isEmpty;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
     final user_id = await prefs.getInt('user_id');
@@ -155,6 +159,8 @@ class _AbsentState extends State<Absent> {
       if (response.statusCode == 200 && response.data != null) {
         if (response.data.length > 0) {
           absentListData = response.data;
+          checkedData(absentListData);
+          checkedReasonData(absentListData);
           setState(() {
             generatedDate = true;
             absentListData;
@@ -216,6 +222,8 @@ class _AbsentState extends State<Absent> {
         setState(() {
           generatedDate = false;
           absentListData = [];
+          checkedReason.isEmpty;
+          checked.isEmpty;
         });
       }
     } catch (e) {
@@ -242,7 +250,7 @@ class _AbsentState extends State<Absent> {
       var response =
           await Dio().post('${urlapi}api/editabsent', data: formData);
       if (response.statusCode == 200 && response.data != null) {
-        checkGenerateDate(dataListStudent);
+        //checkGenerateDate(dataListStudent);
       }
     } catch (e) {
       print('Wrong Edit Absent');
@@ -277,14 +285,30 @@ class _AbsentState extends State<Absent> {
   }
 
   /**============== CheckBox ============= */
-  Widget checkBoxField(var student) {
-    bool ischecked = false;
-    for (var absent in absentListData) {
-      if (absent['student_id'] == student['id']) {
-        if (absent['absent'] == 1) {
-          ischecked = true;
-        }
+  Map<int, bool> checked = {};
+  checkedData(var abSentData) {
+    for (var absent in abSentData) {
+      bool vl = false;
+      int student_id = absent['student_id'] is int
+          ? absent['student_id']
+          : int.parse(absent['student_id']);
+      if (absent['absent'] == 1) {
+        vl = true;
       }
+      Map<int, bool> visible = {student_id: vl};
+      checked.addAll(visible);
+    }
+    setState(() {
+      checked;
+    });
+  }
+
+  Widget checkBoxField(var student) {
+    int student_id =
+        student['id'] is int ? student['id'] : int.parse(student['id']);
+    bool ischecked = false;
+    if (checked[student_id] == true) {
+      ischecked = true;
     }
     return generatedDate
         ? Checkbox(
@@ -293,16 +317,45 @@ class _AbsentState extends State<Absent> {
             value: ischecked,
             onChanged: (bool? value) {
               editAbsent(value, student);
+              bool vl = false;
+              if (value == true) {
+                vl = true;
+              }
+              Map<int, bool> visible = {student_id: vl};
+              checked.addAll(visible);
+              checkedReason.addAll({student_id:false});
+              setState(() {
+                checked;
+                checkedReason;
+              });
             },
           )
-        : Text('');
+        : const Text('');
   }
 
   /**============== CheckBox ============= */
+  Map<int, bool> checkedReason = {};
+  checkedReasonData(var abSentData) {
+    for (var absent in abSentData) {
+      bool vl = false;
+      int student_id = absent['student_id'] is int
+          ? absent['student_id']
+          : int.parse(absent['student_id']);
+      if (absent['reason'] == 1) {
+        vl = true;
+      }
+      Map<int, bool> visible = {student_id: vl};
+      checkedReason.addAll(visible);
+      setState(() {
+        checkedReason;
+      });
+    }
+  }
+
   Widget checkBoxFieldReason(var student) {
     bool ischecked = false;
-    bool is_come = true;
-    for (var absent in absentListData) {
+    bool is_come = false;
+    /* (var absent in absentListData) {
       if (absent['student_id'] == student['id']) {
         if (absent['reason'] == 1) {
           ischecked = true;
@@ -311,6 +364,15 @@ class _AbsentState extends State<Absent> {
           is_come = false;
         }
       }
+    }*/
+
+    int student_id =
+        student['id'] is int ? student['id'] : int.parse(student['id']);
+    if (checkedReason[student_id] == true) {
+      ischecked = true;
+    }
+    if (checked[student_id] == false) {
+      is_come = true;
     }
     return generatedDate && is_come
         ? Checkbox(
@@ -319,6 +381,15 @@ class _AbsentState extends State<Absent> {
             value: ischecked,
             onChanged: (bool? value) {
               editAbsentReason(value, student);
+              bool vl = false;
+              if (value == true) {
+                vl = true;
+              }
+              Map<int, bool> visible = {student_id: vl};
+              checkedReason.addAll(visible);
+              setState(() {
+                checkedReason;
+              });
             },
           )
         : Text('');
@@ -477,7 +548,7 @@ class _AbsentState extends State<Absent> {
                           ),
                           Table(
                             //defaultColumnWidth: FixedColumnWidth(120.0),
-                            columnWidths:abSentColumnWidths,
+                            columnWidths: abSentColumnWidths,
                             border: TableBorder.all(
                                 color: Colors.black,
                                 style: BorderStyle.solid,
@@ -590,8 +661,10 @@ class _AbsentState extends State<Absent> {
                                     child: Column(children: [
                                       Container(
                                         alignment: Alignment.centerLeft,
-                                        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Center(child: checkBoxField(item)),
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        child:
+                                            Center(child: checkBoxField(item)),
                                       )
                                     ]),
                                   ),
@@ -600,7 +673,8 @@ class _AbsentState extends State<Absent> {
                                     child: Column(children: [
                                       Container(
                                         alignment: Alignment.centerLeft,
-                                        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
                                         child: Center(
                                             child: checkBoxFieldReason(item)),
                                       )
@@ -611,7 +685,8 @@ class _AbsentState extends State<Absent> {
                                     child: Column(children: [
                                       Container(
                                         alignment: Alignment.centerLeft,
-                                        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
                                         child: Text('${item['first_name']}' +
                                             " " +
                                             '${item['last_name']}'),

@@ -316,8 +316,9 @@ class _ExamState extends State<Exam> {
           exam_id = 0;
         });
       }
-    } catch (e) {
+    } on DioError catch (e) {
       Navigator.pop(context);
+      // print(e.response);
       print('Wrong Edit Exam.!');
       //AlertLoss();
     }
@@ -343,6 +344,7 @@ class _ExamState extends State<Exam> {
   }
 
   Future<void> duplicateExam(var item) async {
+    Loading();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
     final user_id = await prefs.getInt('user_id');
@@ -358,8 +360,8 @@ class _ExamState extends State<Exam> {
           await Dio().post('${urlapi}api/duplicateexam', data: formData);
       if (response.statusCode == 200 && response.data != null) {
         listDataExam();
-        AlertDone(translate(
-            'Successfull Duplicated.!\nYou should edit date class exam'));
+        Navigator.pop(context);
+        AlertDone(translate('Successfull Duplicated.!'));
         codeGenerateRandomString(10);
       }
     } catch (e) {
@@ -587,7 +589,9 @@ class _ExamState extends State<Exam> {
                                 }
                               }
                             },
-                            color: exam_id == 0?Colors.blueAccent:Colors.deepPurple,
+                            color: exam_id == 0
+                                ? Colors.blueAccent
+                                : Colors.deepPurple,
                             child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: Row(
