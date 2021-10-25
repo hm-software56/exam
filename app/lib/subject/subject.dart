@@ -127,7 +127,7 @@ class _SubjectState extends State<Subject> {
   }
 
 /**=========== List Subject ===================*/
-  var dataListSubject = [];
+  var dataListSubject;
   Future<void> listDataSubject() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -369,7 +369,14 @@ class _SubjectState extends State<Subject> {
                       SizedBox(
                         height: 10,
                       ),
-                      dataListSubject.length == 0
+                      Text(
+                        translate('Item Subjects'),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Divider(
+                        color: Colors.red,
+                      ),
+                      dataListSubject == null
                           ? SpinKitWave(
                               size: 30.0,
                               itemBuilder: (BuildContext context, int index) {
@@ -407,90 +414,85 @@ class _SubjectState extends State<Subject> {
                                       ]),
                                     ),
                                   ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Column(children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        color: Colors.lightBlue,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Text(
                                           translate('Subject'),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                      )
-                                    ]),
+                                        )
+                                      ]),
+                                    ),
                                   ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Column(children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        color: Colors.lightBlue,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Text(
                                           translate('Score class room'),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                      )
-                                    ]),
+                                        )
+                                      ]),
+                                    ),
                                   ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Column(children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        color: Colors.lightBlue,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Text(
                                           translate('Score activity'),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                      )
-                                    ]),
+                                        )
+                                      ]),
+                                    ),
                                   ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Column(children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        color: Colors.lightBlue,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Text(
                                           translate('Score exam'),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                      )
-                                    ]),
+                                        )
+                                      ]),
+                                    ),
                                   ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Column(children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        color: Colors.lightBlue,
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                        child: Text(
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.lightBlue,
+                                    padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(children: [
+                                        Text(
                                           translate('Students'),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                      )
-                                    ]),
+                                        )
+                                      ]),
+                                    ),
                                   ),
                                   Column(children: [Text('')]),
                                 ]),

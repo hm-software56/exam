@@ -100,7 +100,7 @@ class _StudentState extends State<Student> {
   }
 
   /**=========== List student ===================*/
-  var dataList = [];
+  var dataList;
   Future<void> listDataStudent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -303,6 +303,7 @@ class _StudentState extends State<Student> {
                       ],
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
                           children: [
@@ -456,7 +457,15 @@ class _StudentState extends State<Student> {
                         SizedBox(
                           height: 10,
                         ),
-                        dataList.length == 0
+                         Text(
+                        translate('List students'),
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Divider(
+                        color: Colors.red,
+                      ),
+                        dataList == null
                             ? SpinKitWave(
                                 size: 30.0,
                                 itemBuilder: (BuildContext context, int index) {
@@ -523,9 +532,6 @@ class _StudentState extends State<Student> {
                                               EdgeInsets.fromLTRB(5, 2, 5, 2),
                                           child: Text(
                                             '${item['student_code']}',
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                            ),
                                           ),
                                         )
                                       ]),

@@ -83,7 +83,7 @@ class _ClassRoomState extends State<ClassRoom> {
   }
 
   /**=========== List Class Room ===================*/
-  var dataList = [];
+  var dataList;
   Future<void> listDataClassRoom() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -160,10 +160,12 @@ class _ClassRoomState extends State<ClassRoom> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                     BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
                     ],
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
                         translate('Add Class Room'),
@@ -221,7 +223,15 @@ class _ClassRoomState extends State<ClassRoom> {
                       SizedBox(
                         height: 10,
                       ),
-                      dataList.length == 0
+                      Text(
+                        translate('Item Class Room'),
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Divider(
+                        color: Colors.red,
+                      ),
+                      dataList == null
                           ? SpinKitWave(
                               size: 30.0,
                               itemBuilder: (BuildContext context, int index) {
@@ -255,8 +265,7 @@ class _ClassRoomState extends State<ClassRoom> {
                                       child: Text(
                                         translate('Class room'),
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     )
                                   ]),
@@ -267,7 +276,7 @@ class _ClassRoomState extends State<ClassRoom> {
                                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                                       child: Text(
                                         translate('Students'),
-                                         style: TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -286,9 +295,7 @@ class _ClassRoomState extends State<ClassRoom> {
                                             EdgeInsets.fromLTRB(5, 2, 5, 2),
                                         child: Text(
                                           '${item['class_room_name']}',
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                          ),
+                                          
                                         ),
                                       )
                                     ]),
