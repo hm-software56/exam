@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:exam/home/home.dart';
 import '../config/config.dart';
 import '../login/login.dart';
 import 'package:flutter/material.dart';
@@ -23,24 +24,22 @@ class _RegisterState extends State<Register> {
 
   /** =================== Submit Signup ========================= */
   Future<void> submitSignUp() async {
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     final apitoken = await prefs.getString('apitoken');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final apitoken = await prefs.getString('apitoken');
     try {
       var formData = FormData.fromMap({
-        'tokenID': apitoken, 
-        'first_name':firstnameController.text,
+        'tokenID': apitoken,
+        'first_name': firstnameController.text,
         'last_name': lastnameController.text,
         'phone_number': phoneController.text,
         'email': emailController.text,
-        'username':usernameController.text,
-        'password':passwordController.text
+        'username': usernameController.text,
+        'password': passwordController.text
       });
       var response =
           await Dio().post('${urlapi}api/submitsignup', data: formData);
       if (response.statusCode == 200 && response.data != null) {
-        print(response.data);
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (_) => Login()), (route) => false);
+        AlertDone();
       }
     } catch (e) {
       print('Wrong submit first use');
@@ -48,10 +47,87 @@ class _RegisterState extends State<Register> {
     }
   }
 
+  /** =================AlertDone =============== */
+  Future<void> AlertDone() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            width: 400,
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.done_all,
+                    size: 50,
+                    color: Colors.green,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    children: [
+                      Text(
+                        translate(
+                            'You have completed registration as a teacher.!'),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Divider(
+                        color: Colors.red,
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (_) => Login()),
+                              (route) => false);
+                        },
+                        color: Colors.blue[900],
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Icon(
+                                  Icons.login,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                translate('Login'),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text(translate('Sign up for teacher')))),
+      appBar:
+          AppBar(title: Center(child: Text(translate('Sign up for teacher')))),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
@@ -102,7 +178,6 @@ class _RegisterState extends State<Register> {
                           return null;
                         },
                       ),
-                      
                       TextFormField(
                         controller: phoneController,
                         decoration: InputDecoration(
@@ -183,9 +258,6 @@ class _RegisterState extends State<Register> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       submitSignUp();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
                     }
                   },
                   color: Colors.blueAccent,
