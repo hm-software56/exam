@@ -1,5 +1,4 @@
 # management students system
-management students system
 ຄວາມສາມາດຂອງລະບົບ
 1. ລົງທະບຽນເປັນ ອຈ
 2. ເພີ່ມຫ້ອງຮຽນຂອງນັກຮຽນ
