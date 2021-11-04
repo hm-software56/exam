@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dropdown_search2/dropdown_search2.dart';
 import 'package:exam/config/config.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -149,18 +150,38 @@ class _QuestionState extends State<Question> {
     setState(() {
       question_id = int.parse(item['id']);
       questionController.value = TextEditingValue(text: item['question']);
+      String extension = item['question'].toString().split('.').last;
+      if (exts.contains(extension)) {
+        qtImg = item['question'];
+      }
       answers = item['answers'];
       int i = 0;
       for (var ans in item['answers']) {
         i = i + 1;
         if (i == 1) {
           answer1Controller.value = TextEditingValue(text: ans['answer']);
+          String extension = ans['answer'].toString().split('.').last;
+          if (exts.contains(extension)) {
+            asw1Img = ans['answer'];
+          }
         } else if (i == 2) {
           answer2Controller.value = TextEditingValue(text: ans['answer']);
+          String extension = ans['answer'].toString().split('.').last;
+          if (exts.contains(extension)) {
+            asw2Img = ans['answer'];
+          }
         } else if (i == 3) {
           answer3Controller.value = TextEditingValue(text: ans['answer']);
+          String extension = ans['answer'].toString().split('.').last;
+          if (exts.contains(extension)) {
+            asw3Img = ans['answer'];
+          }
         } else {
           answer4Controller.value = TextEditingValue(text: ans['answer']);
+          String extension = ans['answer'].toString().split('.').last;
+          if (exts.contains(extension)) {
+            asw4Img = ans['answer'];
+          }
         }
         if (int.parse(ans['answer_true']) == 1) {
           answerCorrectController.value =
@@ -219,6 +240,11 @@ class _QuestionState extends State<Question> {
       answer3Controller.value = TextEditingValue.empty;
       answer4Controller.value = TextEditingValue.empty;
       answerCorrectController.value = TextEditingValue.empty;
+      qtImg = null;
+      asw1Img = null;
+      asw2Img = null;
+      asw3Img = null;
+      asw4Img = null;
       question_id = 0;
       answers = [];
     });
@@ -282,6 +308,141 @@ class _QuestionState extends State<Question> {
     }
   }
 
+  var qtImg;
+  var asw1Img;
+  var asw2Img;
+  var asw3Img;
+  var asw4Img;
+  List exts = ['png', 'jpg', 'PNG', 'JPG'];
+  Future<void> uploadImage(var type) async {
+    Loading();
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      String path_file_name = result.files.single.path.toString();
+      String extension = result.names[0].toString().split('.').last;
+
+      if (exts.contains(extension)) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final apitoken = await prefs.getString('apitoken');
+        final user_id = await prefs.getInt('user_id');
+        try {
+          var formData = FormData.fromMap({
+            'tokenID': apitoken,
+            'class_room_id': data['id'],
+            'uploadimg': await MultipartFile.fromFile(path_file_name,
+                filename: result.names[0]),
+          });
+          var response =
+              await Dio().post('${urlapi}api/uploadimage', data: formData);
+          if (response.statusCode == 200 && response.data != null) {
+            if (type == 'qt') {
+              questionController.value = TextEditingValue(text: response.data);
+              setState(() {
+                qtImg = response.data;
+              });
+            } else if (type == 'asw1') {
+              answer1Controller.value = TextEditingValue(text: response.data);
+              setState(() {
+                asw1Img = response.data;
+              });
+            } else if (type == 'asw2') {
+              answer2Controller.value = TextEditingValue(text: response.data);
+              setState(() {
+                asw2Img = response.data;
+              });
+            } else if (type == 'asw3') {
+              answer3Controller.value = TextEditingValue(text: response.data);
+              setState(() {
+                asw3Img = response.data;
+              });
+            } else if (type == 'asw4') {
+              answer4Controller.value = TextEditingValue(text: response.data);
+              setState(() {
+                asw4Img = response.data;
+              });
+            }
+
+            print(response.data);
+            Navigator.pop(context); // closs loading
+          }
+        } on DioError catch (e) {
+          print(e.response);
+          print('Wrong Upload images');
+          Navigator.pop(context); // closs loading
+        }
+      } else {
+        // Errors valudate extension
+        print('Errors valudate extension');
+        Navigator.pop(context); // closs loading
+        uploadError(
+            translate('Your file is not image file\nThen extension png, jpg'));
+      }
+    } else {
+      // User canceled the picker
+      Navigator.pop(context); // closs loading
+    }
+  }
+
+  Future<void> uploadError(String msg) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 50,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(msg, style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> removeImage(var type) async {
+    if (type == 'qt') {
+      questionController.value = TextEditingValue.empty;
+      setState(() {
+        qtImg = null;
+      });
+    } else if (type == 'asw1') {
+      answer1Controller.value = TextEditingValue.empty;
+      setState(() {
+        asw1Img = null;
+      });
+    } else if (type == 'asw2') {
+      answer2Controller.value = TextEditingValue.empty;
+      setState(() {
+        asw2Img = null;
+      });
+    } else if (type == 'asw3') {
+      answer3Controller.value = TextEditingValue.empty;
+      setState(() {
+        asw3Img = null;
+      });
+    } else if (type == 'asw4') {
+      answer4Controller.value = TextEditingValue.empty;
+      setState(() {
+        asw4Img = null;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -298,9 +459,9 @@ class _QuestionState extends State<Question> {
         body: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Container(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 color: Colors.white,
                 child: Container(
                   padding: const EdgeInsets.all(10),
@@ -330,28 +491,60 @@ class _QuestionState extends State<Question> {
                                 translate('Exam Code') +
                                 ": " +
                                 data['url_answer'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Divider(
+                        const Divider(
                           color: Colors.red,
                         ),
-                        TextFormField(
-                          controller: questionController,
-                          minLines: 3,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            labelText: translate('Question'),
-                          ),
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return translate('Please input question');
-                            }
-                            return null;
-                          },
-                        ),
+                        qtImg != null
+                            ? Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(translate('Question')),
+                                      const Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          removeImage('qt');
+                                        },
+                                        child: const Icon(
+                                          Icons.remove_circle,
+                                          color: Colors.red,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Image.network("$urlfile/$qtImg"),
+                                  const Divider()
+                                ],
+                              )
+                            : TextFormField(
+                                controller: questionController,
+                                minLines: 3,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  labelText: translate('Question'),
+                                  suffixIcon: InkWell(
+                                    onTap: () {
+                                      uploadImage('qt');
+                                    },
+                                    child: const Icon(
+                                      Icons.image,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return translate('Please input question');
+                                  }
+                                  return null;
+                                },
+                              ),
                         Row(
                           children: [
                             Expanded(
@@ -362,25 +555,57 @@ class _QuestionState extends State<Question> {
                                         const EdgeInsets.fromLTRB(0, 18, 8, 0),
                                     child: Text(
                                       translate('A') + ":",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   Expanded(
-                                    child: TextFormField(
-                                      controller: answer1Controller,
-                                      decoration: InputDecoration(
-                                        labelText: translate('Answer A'),
-                                      ),
-                                      validator: (val) {
-                                        if (val!.isEmpty) {
-                                          return translate(
-                                              'Please input answer A');
-                                        }
-                                        return null;
-                                      },
-                                    ),
+                                    child: asw1Img != null
+                                        ? Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(translate('Answer A')),
+                                                  const Spacer(),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeImage('asw1');
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.remove_circle,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Image.network(
+                                                  "$urlfile/$asw1Img"),
+                                              const Divider()
+                                            ],
+                                          )
+                                        : TextFormField(
+                                            controller: answer1Controller,
+                                            decoration: InputDecoration(
+                                              labelText: translate('Answer A'),
+                                              suffixIcon: InkWell(
+                                                onTap: () {
+                                                  uploadImage('asw1');
+                                                },
+                                                child: const Icon(
+                                                  Icons.image,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return translate(
+                                                    'Please input answer A');
+                                              }
+                                              return null;
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),
@@ -393,25 +618,57 @@ class _QuestionState extends State<Question> {
                                         const EdgeInsets.fromLTRB(0, 18, 8, 0),
                                     child: Text(
                                       translate('B') + ":",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   Expanded(
-                                    child: TextFormField(
-                                      controller: answer2Controller,
-                                      decoration: InputDecoration(
-                                        labelText: translate('Answer B'),
-                                      ),
-                                      validator: (val) {
-                                        if (val!.isEmpty) {
-                                          return translate(
-                                              'Please input answer B');
-                                        }
-                                        return null;
-                                      },
-                                    ),
+                                    child: asw2Img != null
+                                        ? Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(translate('Answer B')),
+                                                  const Spacer(),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeImage('asw2');
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.remove_circle,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Image.network(
+                                                  "$urlfile/$asw2Img"),
+                                              const Divider()
+                                            ],
+                                          )
+                                        : TextFormField(
+                                            controller: answer2Controller,
+                                            decoration: InputDecoration(
+                                              labelText: translate('Answer B'),
+                                              suffixIcon: InkWell(
+                                                onTap: () {
+                                                  uploadImage('asw2');
+                                                },
+                                                child: const Icon(
+                                                  Icons.image,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return translate(
+                                                    'Please input answer B');
+                                              }
+                                              return null;
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),
@@ -428,25 +685,57 @@ class _QuestionState extends State<Question> {
                                         const EdgeInsets.fromLTRB(0, 18, 8, 0),
                                     child: Text(
                                       translate('C') + ":",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   Expanded(
-                                    child: TextFormField(
-                                      controller: answer3Controller,
-                                      decoration: InputDecoration(
-                                        labelText: translate('Answer C'),
-                                      ),
-                                      validator: (val) {
-                                        if (val!.isEmpty) {
-                                          return translate(
-                                              'Please input answer C');
-                                        }
-                                        return null;
-                                      },
-                                    ),
+                                    child: asw3Img != null
+                                        ? Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(translate('Answer C')),
+                                                  const Spacer(),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeImage('asw3');
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.remove_circle,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Image.network(
+                                                  "$urlfile/$asw3Img"),
+                                                  const Divider()
+                                            ],
+                                          )
+                                        : TextFormField(
+                                            controller: answer3Controller,
+                                            decoration: InputDecoration(
+                                              labelText: translate('Answer C'),
+                                              suffixIcon: InkWell(
+                                                onTap: () {
+                                                  uploadImage('asw3');
+                                                },
+                                                child: const Icon(
+                                                  Icons.image,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return translate(
+                                                    'Please input answer C');
+                                              }
+                                              return null;
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),
@@ -459,25 +748,57 @@ class _QuestionState extends State<Question> {
                                         const EdgeInsets.fromLTRB(0, 18, 8, 0),
                                     child: Text(
                                       translate('D') + ":",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   Expanded(
-                                    child: TextFormField(
-                                      controller: answer4Controller,
-                                      decoration: InputDecoration(
-                                        labelText: translate('Answer D'),
-                                      ),
-                                      validator: (val) {
-                                        if (val!.isEmpty) {
-                                          return translate(
-                                              'Please input answer D');
-                                        }
-                                        return null;
-                                      },
-                                    ),
+                                    child: asw4Img != null
+                                        ? Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(translate('Answer D')),
+                                                  const Spacer(),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeImage('asw4');
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.remove_circle,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Image.network(
+                                                  "$urlfile/$asw4Img"),
+                                                  const Divider()
+                                            ],
+                                          )
+                                        : TextFormField(
+                                            controller: answer4Controller,
+                                            decoration: InputDecoration(
+                                              labelText: translate('Answer D'),
+                                              suffixIcon: InkWell(
+                                                onTap: () {
+                                                  uploadImage('asw4');
+                                                },
+                                                child: Icon(
+                                                  Icons.image,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return translate(
+                                                    'Please input answer D');
+                                              }
+                                              return null;
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),
@@ -628,6 +949,11 @@ class _QuestionState extends State<Question> {
     if (number < 2) {
       i = 0;
     }
+    String extension = item['question'].toString().split('.').last;
+    bool questionImage = false;
+    if (exts.contains(extension)) {
+      questionImage = true;
+    }
     return TableRow(children: [
       Column(children: [
         Container(
@@ -640,14 +966,16 @@ class _QuestionState extends State<Question> {
         )
       ]),
       SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.horizontal,
         child: Column(children: [
           Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-            child: Text(
-              '${item['question']}',
-            ),
+            child: questionImage
+                ? Image.network("$urlfile/${item['question']}")
+                : Text(
+                    '${item['question']}',
+                  ),
           )
         ]),
       ),
@@ -700,6 +1028,12 @@ class _QuestionState extends State<Question> {
 
   /** =================Loading =============== */
   Future<void> Answer(var item) async {
+    String extension = item['question'].toString().split('.').last;
+    bool questionImage = false;
+    if (exts.contains(extension)) {
+      questionImage = true;
+    }
+
     return showDialog(
       context: context,
       barrierDismissible: true,
@@ -711,10 +1045,12 @@ class _QuestionState extends State<Question> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${item['question']}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                questionImage
+                    ? Image.network("$urlfile/${item['question']}")
+                    : Text(
+                        '${item['question']}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                 Divider(
                   color: Colors.red,
                 ),
@@ -734,24 +1070,43 @@ class _QuestionState extends State<Question> {
     if (n == 4) {
       n = 0;
     }
+
+    String extension = qa['answer'].toString().split('.').last;
+    bool answerImage = false;
+    if (exts.contains(extension)) {
+      answerImage = true;
+    }
+
     return Row(
       children: [
         qa['answer_true'] == '0'
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('${an}'),
+                child: Text(
+                  '${an}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               )
             : Container(
-                decoration:
-                    BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 3.0, color: Colors.green),
+                  borderRadius: const BorderRadius.all(Radius.circular(
+                          50) //                 <--- border radius here
+                      ),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('${an}'),
+                  child: Text(
+                    '${an}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('${qa['answer']}'),
+          child: answerImage
+              ? Image.network("$urlfile/${qa['answer']}")
+              : Text('${qa['answer']}'),
         ),
       ],
     );

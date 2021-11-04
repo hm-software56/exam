@@ -179,6 +179,20 @@ class ApiController extends \yii\web\Controller
         $this->CountStudent(Yii::$app->request->post('class_room_id'));
         return $result;
     }
+    public function actionUploadimage(){
+        $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
+        if ($token['id'] == false) {
+            return $token;
+        }
+        $upload = UploadedFile::getInstanceByName("uploadimg");
+        if($upload){
+            $realFileName = rand(). time() . '.' . $upload->extension;
+            $path = \Yii::$app->basePath . '/web/files/' . $realFileName;
+            $upload->saveAs($path);
+            return $realFileName;
+        }
+        
+    }
     public function actionImportcsv(){
         $token = $this->checkToken(\Yii::$app->request->post('tokenID'));
         if ($token['id'] == false) {
