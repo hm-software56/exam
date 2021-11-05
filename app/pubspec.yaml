@@ -48,6 +48,7 @@ dependencies:
   date_time_picker: ^2.1.0
   popover: ^0.2.6+3 
   awesome_dialog: ^2.1.1 
+  pinch_zoom: ^1.0.0
 
 dev_dependencies:
   flutter_app_name: ^0.1.0

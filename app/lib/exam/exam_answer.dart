@@ -7,6 +7,7 @@ import 'package:exam/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExamAnswer extends StatefulWidget {
@@ -25,7 +26,7 @@ class _ExamAnswerState extends State<ExamAnswer> {
   _ExamAnswerState(this.exam, this.student);
 
   var dataQuestion = [];
-  int countQuestion=0;
+  int countQuestion = 0;
   Future<void> listDataQuestion() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final apitoken = await prefs.getString('apitoken');
@@ -39,7 +40,7 @@ class _ExamAnswerState extends State<ExamAnswer> {
           await Dio().post('${urlapi}api/studentexam', data: formData);
       if (response.statusCode == 200 && response.data.length > 1) {
         dataQuestion = response.data;
-        countQuestion=dataQuestion.length;
+        countQuestion = dataQuestion.length;
         listDataStudentAnswer(dataQuestion);
         setState(() {
           dataQuestion;
@@ -132,13 +133,13 @@ class _ExamAnswerState extends State<ExamAnswer> {
         'question_id': question_id,
         'answer_id': answer_id,
         'student_id': student['id'],
-        'count_question':countQuestion,
-        'exam_id':exam['id']
+        'count_question': countQuestion,
+        'exam_id': exam['id']
       });
       var response =
           await Dio().post('${urlapi}api/answerquestion', data: formData);
       if (response.statusCode == 200) {
-          print('answer');
+        print('answer');
         //print(response.data);
       }
     } on DioError catch (e) {
@@ -250,6 +251,25 @@ class _ExamAnswerState extends State<ExamAnswer> {
     );
   }
 
+  List exts = ['png', 'jpg', 'PNG', 'JPG'];
+  Future<void> vienImg(var name) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.network("$urlfile/${name}"),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -279,10 +299,17 @@ class _ExamAnswerState extends State<ExamAnswer> {
                       children: [
                         ListView.builder(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: dataQuestion.length,
                           itemBuilder: (BuildContext context, int index) {
                             final question = dataQuestion[index];
                             var add = visibleAnswer[int.parse(question['id'])];
+                            String extension =
+                                question['question'].toString().split('.').last;
+                            bool questionImage = false;
+                            if (exts.contains(extension)) {
+                              questionImage = true;
+                            }
                             return ListTile(
                                 //leading: Text((index + 1).toString()),
                                 trailing: InkWell(
@@ -313,11 +340,23 @@ class _ExamAnswerState extends State<ExamAnswer> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text((index + 1).toString() + '. '),
-                                        Expanded(
-                                            child: Text(
-                                                "${question['question']}")),
+                                        questionImage
+                                            ? Flexible(
+                                                child: SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Image.network(
+                                                      "$urlfile/${question['question']}",
+                                                      fit: BoxFit.contain),
+                                                ),
+                                              )
+                                            : Expanded(
+                                                child: Text(
+                                                    "${question['question']}")),
                                       ],
                                     ),
                                     Visibility(
@@ -335,6 +374,17 @@ class _ExamAnswerState extends State<ExamAnswer> {
                                               int index) {
                                             final answer =
                                                 question['answers'][index];
+
+                                            String extensionasw =
+                                                answer['answer']
+                                                    .toString()
+                                                    .split('.')
+                                                    .last;
+                                            bool aswImage = false;
+                                            if (exts.contains(extensionasw)) {
+                                              aswImage = true;
+                                            }
+
                                             return ListTile(
                                                 leading: Radio(
                                                   value:
@@ -367,9 +417,21 @@ class _ExamAnswerState extends State<ExamAnswer> {
                                                     Text(
                                                         "${listAnswer[index]}" +
                                                             ". "),
-                                                    Expanded(
-                                                        child: Text(
-                                                            "${answer['answer']}")),
+                                                    aswImage
+                                                        ? Flexible(
+                                                            child:
+                                                                SingleChildScrollView(
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                              child: Image.network(
+                                                                  "$urlfile/${answer['answer']}",
+                                                                  fit: BoxFit
+                                                                      .contain),
+                                                            ),
+                                                          )
+                                                        : Expanded(
+                                                            child: Text(
+                                                                "${answer['answer']}")),
                                                   ],
                                                 ));
                                           }),

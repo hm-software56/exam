@@ -561,10 +561,10 @@ class _AbsentState extends State<Absent> {
                                     Container(
                                       alignment: Alignment.center,
                                       color: Colors.lightBlue,
-                                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                                       child: Text(
                                         translate('Check Name'),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
