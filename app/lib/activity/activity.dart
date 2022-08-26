@@ -855,7 +855,7 @@ class _ActivityState extends State<Activity> {
                               border: UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0))),
                           showAsSuffixIcons: true,
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: listCL,
                           label: translate("Class Room"),
                           showSearchBox: false,
@@ -881,7 +881,7 @@ class _ActivityState extends State<Activity> {
                               border: UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0))),
                           showAsSuffixIcons: true,
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: listSubject,
                           label: translate("Subject"),
                           showSearchBox: false,
@@ -910,7 +910,7 @@ class _ActivityState extends State<Activity> {
                               border: UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0))),
                           showAsSuffixIcons: true,
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: listActivity,
                           label: translate("Activity"),
                           showSearchBox: false,

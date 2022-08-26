@@ -489,7 +489,7 @@ class _AbsentState extends State<Absent> {
                               border: UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0))),
                           showAsSuffixIcons: true,
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: listCL,
                           label: translate("Class Room"),
                           showSearchBox: false,
@@ -504,6 +504,7 @@ class _AbsentState extends State<Absent> {
                         padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                         child: DropdownSearch<String>(
                           mode: Mode.MENU,
+                          showSelectedItems: true,
                           validator: (dynamic value) {
                             if (value == null || value.isEmpty) {
                               return translate('Please select subject');
@@ -515,7 +516,6 @@ class _AbsentState extends State<Absent> {
                               border: UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0))),
                           showAsSuffixIcons: true,
-                          showSelectedItem: true,
                           items: listSubject,
                           label: translate("Subject"),
                           //selectedItem: subject_name,

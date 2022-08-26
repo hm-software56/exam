@@ -186,7 +186,7 @@ class _ClassRoomState extends State<ClassRoom> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       RaisedButton(

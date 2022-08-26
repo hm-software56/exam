@@ -820,7 +820,7 @@ class _QuestionState extends State<Question> {
                               border: UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0))),
                           showAsSuffixIcons: true,
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: answerCorrect,
                           selectedItem: answerCorrectController.text,
                           label: translate("Select correct answer"),

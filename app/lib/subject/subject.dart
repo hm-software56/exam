@@ -261,7 +261,7 @@ class _SubjectState extends State<Subject> {
                             border: UnderlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0))),
                         showAsSuffixIcons: true,
-                        showSelectedItem: true,
+                        showSelectedItems: true,
                         items: listCL,
                         label: translate("Class Room"),
                         selectedItem: class_room_name,

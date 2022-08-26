@@ -444,7 +444,7 @@ class _ExamState extends State<Exam> {
                                             borderRadius:
                                                 BorderRadius.circular(5.0))),
                                     showAsSuffixIcons: true,
-                                    showSelectedItem: true,
+                                    showSelectedItems: true,
                                     items: listCL,
                                     selectedItem: classRoomController.text,
                                     label: translate("Class Room"),
@@ -477,7 +477,7 @@ class _ExamState extends State<Exam> {
                                             borderRadius:
                                                 BorderRadius.circular(5.0))),
                                     showAsSuffixIcons: true,
-                                    showSelectedItem: true,
+                                    showSelectedItems: true,
                                     items: listSubject,
                                     selectedItem: subjectTitleController.text,
                                     label: translate("Subject"),

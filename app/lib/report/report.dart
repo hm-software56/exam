@@ -321,7 +321,7 @@ class _ReportState extends State<Report> {
                                         borderRadius:
                                             BorderRadius.circular(5.0))),
                                 showAsSuffixIcons: true,
-                                showSelectedItem: true,
+                                showSelectedItems: true,
                                 items: listCL,
                                 label: translate("Class Room"),
                                 showSearchBox: false,
@@ -348,7 +348,7 @@ class _ReportState extends State<Report> {
                                         borderRadius:
                                             BorderRadius.circular(5.0))),
                                 showAsSuffixIcons: true,
-                                showSelectedItem: true,
+                                showSelectedItems: true,
                                 items: listSubject,
                                 label: translate("Subject"),
                                 //selectedItem: subject_name,
