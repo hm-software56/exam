@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
-var ip = "http://192.168.50.106";
-//var ip="http://192.168.159.1:80";
-//var ip="http://183.182.107.122:9997";
-//var ip = "https://pos.cyberia.la/apims/web";
+//var ip = "http://192.168.50.106";
+var ip="http://183.182.107.122:2020";
 var urlapi = "${ip}/index.php?r=";
 var urlimg = "${ip}/images";
 var urlfile = "${ip}/files";

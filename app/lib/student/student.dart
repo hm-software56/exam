@@ -168,7 +168,8 @@ class _StudentState extends State<Student> {
             listDataStudent();
             Navigator.pop(context); // closs loading
           }
-        } catch (e) {
+        } on DioError catch(e) {
+          print(e.response);
           print('Wrong import csv student');
           Navigator.pop(context); // closs loading
           importError(translate(

@@ -3,7 +3,6 @@ import '../config/config.dart';
 import '../menu/menu.dart';
 import '../student/student.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
