@@ -159,7 +159,7 @@ class _ClassRoomState extends State<ClassRoom> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                      BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
                   child: Column(
@@ -188,7 +188,7 @@ class _ClassRoomState extends State<ClassRoom> {
                       const SizedBox(
                         height: 10,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             if (isedit) {
@@ -198,7 +198,6 @@ class _ClassRoomState extends State<ClassRoom> {
                             }
                           }
                         },
-                        color: Colors.blueGrey,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                           child: Row(

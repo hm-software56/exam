@@ -469,7 +469,7 @@ class _QuestionState extends State<Question> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                       BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
                   child: Form(
@@ -833,7 +833,7 @@ class _QuestionState extends State<Question> {
                         SizedBox(
                           height: 10,
                         ),
-                        RaisedButton(
+                        ElevatedButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               if (question_id == 0) {
@@ -843,9 +843,11 @@ class _QuestionState extends State<Question> {
                               }
                             }
                           },
-                          color: question_id == 0
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: question_id == 0
                               ? Colors.blueAccent
                               : Colors.pink,
+                            ),
                           child: Padding(
                             padding: const EdgeInsets.all(8),
                             child: Row(

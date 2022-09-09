@@ -287,7 +287,7 @@ class _ReportState extends State<Report> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                      BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
                   child: Column(

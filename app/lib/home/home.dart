@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(builder: (_) => Login()), (route) => false);
     }
   }
-
+  
   @override
   void initState() {
     super.initState();
@@ -38,6 +38,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context) {
+    double height = (MediaQuery.of(context).size.height-100)/3;
     return Scaffold(
       drawer: Menu(),
       appBar: AppBar(
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                      BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
         child: ListView(
@@ -73,7 +74,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         color: Colors.transparent,
-                        child: FlatButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
                           onPressed: () => {
                             Navigator.push<void>(
                               context,
@@ -82,24 +85,26 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           },
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 29),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.groups_outlined,
-                                size: 60,
-                                color: Color(0xff008fd4),
-                              ),
-                              Text(
-                                translate('Class Room'),
-                                style: TextStyle(
+                          child: SizedBox(
+                            height: height,
+                            child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.groups_outlined,
+                                  size: 60,
                                   color: Color(0xff008fd4),
-                                  //fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  translate('Class Room'),
+                                  style: TextStyle(
+                                    color: Color(0xff008fd4),
+                                    //fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -115,7 +120,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         color: Colors.transparent,
-                        child: FlatButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
                           onPressed: () => {
                             Navigator.push<void>(
                               context,
@@ -124,24 +131,26 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           },
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 29),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.auto_stories,
-                                size: 60,
-                                color: Color(0xff008fd4),
-                              ),
-                              Text(
-                                translate('Subject'),
-                                style: TextStyle(
+                          child: SizedBox(
+                            height: height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.auto_stories,
+                                  size: 60,
                                   color: Color(0xff008fd4),
-                                  //fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  translate('Subject'),
+                                  style: TextStyle(
+                                    color: Color(0xff008fd4),
+                                    //fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -162,7 +171,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         color: Colors.transparent,
-                        child: FlatButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
                           onPressed: () => {
                             Navigator.push<void>(
                               context,
@@ -171,24 +182,26 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           },
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 29),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.add_business_outlined,
-                                size: 60,
-                                color: Color(0xff008fd4),
-                              ),
-                              Text(
-                                translate('Check Absent'),
-                                style: TextStyle(
+                          child: SizedBox(
+                            height: height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add_business_outlined,
+                                  size: 60,
                                   color: Color(0xff008fd4),
-                                  //fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  translate('Check Absent'),
+                                  style: TextStyle(
+                                    color: Color(0xff008fd4),
+                                    //fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -204,7 +217,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         color: Colors.transparent,
-                        child: FlatButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
                           onPressed: () => {
                             Navigator.push<void>(
                               context,
@@ -213,24 +228,26 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           },
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 29),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.local_activity,
-                                size: 60,
-                                color: Color(0xff008fd4),
-                              ),
-                              Text(
-                                translate('Activity'),
-                                style: TextStyle(
+                          child: SizedBox(
+                            height: height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.local_activity,
+                                  size: 60,
                                   color: Color(0xff008fd4),
-                                  //fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  translate('Activity'),
+                                  style: TextStyle(
+                                    color: Color(0xff008fd4),
+                                    //fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -250,7 +267,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         color: Colors.transparent,
-                        child: FlatButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
                           onPressed: () => {
                             Navigator.push<void>(
                               context,
@@ -259,24 +278,26 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           },
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 29),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.text_fields,
-                                size: 60,
-                                color: Color(0xff008fd4),
-                              ),
-                              Text(
-                                translate('Exam'),
-                                style: TextStyle(
+                          child: SizedBox(
+                            height: height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.text_fields,
+                                  size: 60,
                                   color: Color(0xff008fd4),
-                                  //fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  translate('Exam'),
+                                  style: TextStyle(
+                                    color: Color(0xff008fd4),
+                                    //fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -292,7 +313,9 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         color: Colors.transparent,
-                        child: FlatButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
                           onPressed: () => {
                             Navigator.push<void>(
                               context,
@@ -301,24 +324,26 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           },
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 29),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                Icons.bar_chart,
-                                size: 60,
-                                color: Color(0xff008fd4),
-                              ),
-                              Text(
-                                translate('Report'),
-                                style: TextStyle(
+                          child: SizedBox(
+                            height: height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.bar_chart,
+                                  size: 60,
                                   color: Color(0xff008fd4),
-                                  //fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  translate('Report'),
+                                  style: TextStyle(
+                                    color: Color(0xff008fd4),
+                                    //fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

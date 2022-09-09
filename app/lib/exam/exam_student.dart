@@ -104,13 +104,18 @@ class _ExamStudentState extends State<ExamStudent> {
                             data['exam']['subject']['title'],
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(translate('Time exam') +
-                          ": " +
-                          DateFormat('MM/dd/yyyy hh:mm:ss').format(
-                              DateTime.parse(data['exam']['start_time'])) +
-                          " - " +
-                          DateFormat('hh:mm:ss').format(
-                              DateTime.parse(data['exam']['end_time'])) + " "+translate('Clock'), style: TextStyle(color: Colors.pink[900]),),
+                      Text(
+                        translate('Time exam') +
+                            ": " +
+                            DateFormat('MM/dd/yyyy hh:mm:ss').format(
+                                DateTime.parse(data['exam']['start_time'])) +
+                            " - " +
+                            DateFormat('hh:mm:ss').format(
+                                DateTime.parse(data['exam']['end_time'])) +
+                            " " +
+                            translate('Clock'),
+                        style: TextStyle(color: Colors.pink[900]),
+                      ),
                       Divider(
                         color: Colors.red,
                       ),
@@ -147,11 +152,12 @@ class _ExamStudentState extends State<ExamStudent> {
                         height: 10,
                       ),
                       timStart == false
-                          ? RaisedButton(
+                          ? ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              color: Colors.red,
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red),
                               child: Padding(
                                 padding: const EdgeInsets.all(2),
                                 child: Row(
@@ -173,11 +179,12 @@ class _ExamStudentState extends State<ExamStudent> {
                             )
                           : Row(
                               children: [
-                                RaisedButton(
+                                ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  color: Colors.red,
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red),
                                   child: Padding(
                                     padding: const EdgeInsets.all(2),
                                     child: Row(
@@ -199,7 +206,7 @@ class _ExamStudentState extends State<ExamStudent> {
                                   ),
                                 ),
                                 Spacer(),
-                                RaisedButton(
+                                ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                     Navigator.push(
@@ -211,7 +218,8 @@ class _ExamStudentState extends State<ExamStudent> {
                                               )),
                                     );
                                   },
-                                  color: Colors.green,
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green),
                                   child: Padding(
                                     padding: const EdgeInsets.all(2),
                                     child: Row(
@@ -332,7 +340,7 @@ class _ExamStudentState extends State<ExamStudent> {
                                   );
                                 },
                               )
-                            : RaisedButton(
+                            : ElevatedButton(
                                 onPressed: () {
                                   if (loginFormKey.currentState!.validate()) {
                                     setState(() {
@@ -341,7 +349,8 @@ class _ExamStudentState extends State<ExamStudent> {
                                     submitCheckExam();
                                   }
                                 },
-                                color: Colors.blueAccent,
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.lightBlue[900]),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),
                                   child: Row(

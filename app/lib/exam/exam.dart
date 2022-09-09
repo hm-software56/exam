@@ -398,7 +398,7 @@ class _ExamState extends State<Exam> {
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
               boxShadow: const [
-                BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                BoxShadow(color: Colors.blue, spreadRadius: 1),
               ],
             ),
             child: Form(
@@ -579,7 +579,7 @@ class _ExamState extends State<Exam> {
                           SizedBox(
                             height: 10,
                           ),
-                          RaisedButton(
+                          ElevatedButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 if (exam_id == 0) {
@@ -589,9 +589,11 @@ class _ExamState extends State<Exam> {
                                 }
                               }
                             },
-                            color: exam_id == 0
-                                ? Colors.blueAccent
-                                : Colors.deepPurple,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: exam_id == 0
+                                  ? Colors.blueAccent
+                                  : Colors.deepPurple, // Background color
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: Row(

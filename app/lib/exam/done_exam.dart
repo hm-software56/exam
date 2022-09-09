@@ -43,14 +43,15 @@ class _DoneExamState extends State<DoneExam> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (_) => const Home()),
                       (route) => false);
                 },
-                color: Colors.lightBlue[900],
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightBlue[900]),
                 child: Padding(
                   padding: const EdgeInsets.all(2),
                   child: Row(

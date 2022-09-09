@@ -82,14 +82,16 @@ class _RegisterState extends State<Register> {
                       Divider(
                         color: Colors.red,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (_) => Login()),
                               (route) => false);
                         },
-                        color: Colors.blue[900],
+                        style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue[900]
+                            ),
                         child: Padding(
                           padding: const EdgeInsets.all(4),
                           child: Row(
@@ -143,7 +145,7 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                      BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
                   child: Column(
@@ -212,7 +214,7 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                       BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
                   child: Column(
@@ -254,13 +256,15 @@ class _RegisterState extends State<Register> {
                 SizedBox(
                   height: 10,
                 ),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       submitSignUp();
                     }
                   },
-                  color: Colors.blueAccent,
+                  style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent
+                            ),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                     child: Row(

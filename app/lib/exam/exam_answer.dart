@@ -185,7 +185,7 @@ class _ExamAnswerState extends State<ExamAnswer> {
                       ),
                       Row(
                         children: [
-                          RaisedButton(
+                          ElevatedButton(
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                   context,
@@ -193,7 +193,8 @@ class _ExamAnswerState extends State<ExamAnswer> {
                                       builder: (_) => const Home()),
                                   (route) => false);
                             },
-                            color: Colors.green[900],
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green[900]),
                             child: Padding(
                               padding: const EdgeInsets.all(2),
                               child: Row(
@@ -214,11 +215,12 @@ class _ExamAnswerState extends State<ExamAnswer> {
                             ),
                           ),
                           Spacer(),
-                          RaisedButton(
+                          ElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            color: Colors.indigo,
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.lightBlue[900]),
                             child: Padding(
                               padding: const EdgeInsets.all(2),
                               child: Row(
@@ -449,12 +451,14 @@ class _ExamAnswerState extends State<ExamAnswer> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: RaisedButton(
+                                    child: ElevatedButton(
                                       onPressed: () {
                                         AlertDone(translate(
                                             'You have done answer question\nGood luck to you.!'));
                                       },
-                                      color: Colors.lightBlue[900],
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.lightBlue[900]),
                                       child: Padding(
                                         padding: const EdgeInsets.all(2),
                                         child: Row(

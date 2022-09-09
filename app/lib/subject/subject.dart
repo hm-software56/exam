@@ -234,7 +234,7 @@ class _SubjectState extends State<Subject> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                     boxShadow: const [
-                      BoxShadow(color: Colors.blueGrey, spreadRadius: 2),
+                       BoxShadow(color: Colors.blue, spreadRadius: 1),
                     ],
                   ),
                   child: Column(
@@ -335,7 +335,7 @@ class _SubjectState extends State<Subject> {
                       SizedBox(
                         height: 10,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             if (isedit) {
@@ -345,7 +345,9 @@ class _SubjectState extends State<Subject> {
                             }
                           }
                         },
-                        color: Colors.blueGrey,
+                        style: ElevatedButton.styleFrom(
+                              backgroundColor:  Colors.blueGrey,
+                            ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                           child: Row(

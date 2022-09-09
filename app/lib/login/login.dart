@@ -299,7 +299,7 @@ class _LoginState extends State<Login> {
                                         );
                                       },
                                     )
-                                  : RaisedButton(
+                                  : ElevatedButton(
                                       onPressed: () {
                                         if (loginFormKey.currentState!
                                             .validate()) {
@@ -309,7 +309,9 @@ class _LoginState extends State<Login> {
                                           submitLogin();
                                         }
                                       },
-                                      color: Colors.blueAccent,
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.lightBlue[900]),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8),
                                         child: Row(
